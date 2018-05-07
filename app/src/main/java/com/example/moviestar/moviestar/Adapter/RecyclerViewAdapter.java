@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -77,6 +78,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
             String imagen = pelicula.getCaratula();
 
+
             imageView = itemView.findViewById(R.id.caratula);
 
             ImageRequest imageRequest = new ImageRequest(imagen, new Response.Listener<Bitmap>() {
@@ -115,7 +117,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                      context.startActivity(intent);
                  }
              });
+
         }
+
     }
 
     public static Bitmap scaleDown(Bitmap realImage, float maxImageSize,

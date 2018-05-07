@@ -42,14 +42,14 @@
         android:id="@+id/separator"
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:background="#4F6BFF"
+        android:background="#5A6ABC"
         android:layout_below="@id/layout" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycledView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/separator"/>
+        android:layout_below="@id/separator" />
 
 
 </RelativeLayout>

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.CircularProgressDrawable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,11 +38,12 @@ public class FPeliculas extends Fragment implements Response.Listener<JSONObject
     RequestQueue request;
     JsonObjectRequest jsonObjectRequest;
     View vista;
-    int cont;
+    int cont = 1;
     RecyclerView recycledPeliculas;
     ArrayList<Pelicula> listaPeliculas;
     ArrayList<String> listaGeneros;
     Boolean isScrolling = false;
+    RecyclerViewAdapter adapter;
     int currentItems, totalItems,scrollOutItems;
     GridLayoutManager manager;
 
@@ -51,7 +54,7 @@ public class FPeliculas extends Fragment implements Response.Listener<JSONObject
 
         vista=inflater.inflate(R.layout.fragment_peliculas, container, false);
 
-        cont = 1;
+
 
         listaPeliculas = new ArrayList<>();
         listaGeneros = new ArrayList<>();
@@ -59,7 +62,15 @@ public class FPeliculas extends Fragment implements Response.Listener<JSONObject
         request =  Volley.newRequestQueue(getContext());
 
         recycledPeliculas = vista.findViewById(R.id.recycledView);
+        manager = new GridLayoutManager(getContext(), 2);
+        recycledPeliculas.setLayoutManager(manager);
+        adapter = new RecyclerViewAdapter(getContext(), R.layout.peliculasview, listaPeliculas);
+        recycledPeliculas.setAdapter(adapter);
+
+
+
         llamarApi();
+
 
 
         return vista;
@@ -124,9 +135,9 @@ public class FPeliculas extends Fragment implements Response.Listener<JSONObject
             e.printStackTrace();
         }
 
-        manager = new GridLayoutManager(getContext(), 2);
-        recycledPeliculas.setLayoutManager(manager);
-        recycledPeliculas.setAdapter(new RecyclerViewAdapter(getContext(), R.layout.peliculasview, listaPeliculas));
+
+
+        adapter.notifyDataSetChanged();
         recycledPeliculas.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -156,11 +167,13 @@ public class FPeliculas extends Fragment implements Response.Listener<JSONObject
                 }
             }
         });
+
     }
 
     @Override
     public void onErrorResponse(VolleyError error) {
         Toast.makeText(getContext(),"Error", Toast.LENGTH_LONG).show();
+
     }
 
     public ArrayList<String> obtenerGeneros(int genero_id) {
