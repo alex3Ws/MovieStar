@@ -1,29 +1,32 @@
 package com.example.moviestar.moviestar.Entidades;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.ArrayList;
 
-public class Pelicula {
+public class Pelicula implements Parcelable {
 
     private int id;
     private double valoracion;
     private String titulo;
-    private String caratula = "http://image.tmdb.org/t/p/w92";
+    private String caratula = "http://image.tmdb.org/t/p/w500";
     private ArrayList<String> generos;
     private String sinopsis;
-    private String año;
+    private String ano;
 
     public Pelicula(){
 
     }
 
-    public Pelicula(int id, double valoracion, String titulo, String caratula, ArrayList<String> generos, String sinopsis, String año) {
+    public Pelicula(int id, double valoracion, String titulo, String caratula, ArrayList<String> generos, String sinopsis, String ano) {
         this.id = id;
         this.valoracion = valoracion;
         this.titulo = titulo;
         this.caratula = caratula;
         this.generos = generos;
         this.sinopsis = sinopsis;
-        this.año = año;
+        this.ano = ano;
     }
 
     public int getId() {
@@ -75,11 +78,48 @@ public class Pelicula {
         this.sinopsis = sinopsis;
     }
 
-    public String getAño() {
-        return año;
+    public String getAno() {
+        return ano;
     }
 
-    public void setAño(String año) {
-        this.año = año;
+    public void setAno(String ano) {
+        this.ano = ano;
     }
+
+    protected Pelicula(Parcel in) {
+        id = in.readInt();
+        valoracion = in.readDouble();
+        titulo = in.readString();
+        caratula = in.readString();
+        sinopsis = in.readString();
+        ano = in.readString();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeDouble(valoracion);
+        dest.writeString(titulo);
+        dest.writeString(caratula);
+        dest.writeString(sinopsis);
+        dest.writeString(ano);
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Pelicula> CREATOR = new Parcelable.Creator<Pelicula>() {
+        @Override
+        public Pelicula createFromParcel(Parcel in) {
+            return new Pelicula(in);
+        }
+
+        @Override
+        public Pelicula[] newArray(int size) {
+            return new Pelicula[size];
+        }
+    };
 }

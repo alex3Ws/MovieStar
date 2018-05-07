@@ -48,16 +48,10 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-       /* prueba = findViewById(R.id.tprueba);
 
-        String user = getIntent().getExtras().getString("Usuario");*/
+        android.support.v4.app.FragmentManager fragmentManager1 = getSupportFragmentManager();
 
-        //android.support.v4.app.FragmentManager fragmentManager1 = getSupportFragmentManager();
-
-   //     fragmentManager1.beginTransaction().replace(R.id.contenedor, new FPeliculas()).commit();
-
-        //prueba.setText(user);
-
+        fragmentManager1.beginTransaction().replace(R.id.contenedor, new FPeliculas()).commit();
     }
 
     @Override

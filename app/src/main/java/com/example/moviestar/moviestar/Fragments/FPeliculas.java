@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,24 +37,28 @@ public class FPeliculas extends Fragment implements Response.Listener<JSONObject
     JsonObjectRequest jsonObjectRequest;
     View vista;
     int cont;
-    RecyclerView recyclerPeliculas;
+    RecyclerView recycledPeliculas;
     ArrayList<Pelicula> listaPeliculas;
-
     ArrayList<String> listaGeneros;
+    Boolean isScrolling = false;
+    int currentItems, totalItems,scrollOutItems;
+    GridLayoutManager manager;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         vista=inflater.inflate(R.layout.fragment_peliculas, container, false);
 
-        cont=0;
+        cont = 1;
 
         listaPeliculas = new ArrayList<>();
         listaGeneros = new ArrayList<>();
 
         request =  Volley.newRequestQueue(getContext());
 
+        recycledPeliculas = vista.findViewById(R.id.recycledView);
         llamarApi();
 
 
@@ -64,7 +69,7 @@ public class FPeliculas extends Fragment implements Response.Listener<JSONObject
 
 
         String url  = "https://api.themoviedb.org/3/discover/movie?api_key=a2424ed363ead46acaa726cf8cb45bad&language=en-US&" +
-                "sort_by=popularity.desc&include_adult=false&include_video=false&page="+String.valueOf(cont);
+                "sort_by=popularity.desc&include_adult=false&include_video=false&page="+cont;
 
 
         jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,url,null,this,this);
@@ -96,13 +101,14 @@ public class FPeliculas extends Fragment implements Response.Listener<JSONObject
                 p.setTitulo(jsonObject.optString("title"));
                 p.setCaratula(jsonObject.optString("poster_path"));
                 p.setSinopsis(jsonObject.optString("overview"));
+                p.setAno(jsonObject.optString("release_date"));
 
                 JSONArray json2 = null;
-                json2 = response.optJSONArray("genre_ids");
+                json2 = jsonObject.optJSONArray("genre_ids");
 
                 for(int j=0;j<json2.length();j++){
 
-                    int genero_id = json2.getInt(i);
+                    int genero_id = json2.getInt(j);
 
                     listaGeneros = obtenerGeneros(genero_id);
 
@@ -118,14 +124,43 @@ public class FPeliculas extends Fragment implements Response.Listener<JSONObject
             e.printStackTrace();
         }
 
-        RecyclerView rv = vista.findViewById(R.id.recycledView);
-        rv.setLayoutManager(new GridLayoutManager(getContext(), 2));
-        rv.setAdapter(new RecyclerViewAdapter(getContext(), R.layout.peliculasview, listaPeliculas));
+        manager = new GridLayoutManager(getContext(), 2);
+        recycledPeliculas.setLayoutManager(manager);
+        recycledPeliculas.setAdapter(new RecyclerViewAdapter(getContext(), R.layout.peliculasview, listaPeliculas));
+        recycledPeliculas.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+                if(newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL){
+
+                    isScrolling = true;
+
+                }
+
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                currentItems = manager.getChildCount();
+                totalItems = manager.getItemCount();
+                scrollOutItems = manager.findFirstVisibleItemPosition();
+
+                if(isScrolling && (currentItems + scrollOutItems == totalItems)){
+
+                    isScrolling = false;
+                    llamarApi();
+
+                }
+            }
+        });
     }
 
     @Override
     public void onErrorResponse(VolleyError error) {
-        Toast.makeText(getContext(),"Errorrrr", Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(),"Error", Toast.LENGTH_LONG).show();
     }
 
     public ArrayList<String> obtenerGeneros(int genero_id) {
