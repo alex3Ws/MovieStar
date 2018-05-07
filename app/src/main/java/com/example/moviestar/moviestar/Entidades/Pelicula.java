@@ -1,5 +1,6 @@
 package com.example.moviestar.moviestar.Entidades;
 
+import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -14,12 +15,13 @@ public class Pelicula implements Parcelable {
     private ArrayList<String> generos;
     private String sinopsis;
     private String ano;
+    private Bitmap imagen;
 
     public Pelicula(){
 
     }
 
-    public Pelicula(int id, double valoracion, String titulo, String caratula, ArrayList<String> generos, String sinopsis, String ano) {
+    public Pelicula(int id, double valoracion, String titulo, String caratula, ArrayList<String> generos, String sinopsis, String ano,Bitmap imagen) {
         this.id = id;
         this.valoracion = valoracion;
         this.titulo = titulo;
@@ -27,6 +29,7 @@ public class Pelicula implements Parcelable {
         this.generos = generos;
         this.sinopsis = sinopsis;
         this.ano = ano;
+        this.imagen = imagen;
     }
 
     public int getId() {
@@ -86,6 +89,15 @@ public class Pelicula implements Parcelable {
         this.ano = ano;
     }
 
+    public Bitmap getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(Bitmap imagen) {
+        this.imagen = imagen;
+    }
+
+
     protected Pelicula(Parcel in) {
         id = in.readInt();
         valoracion = in.readDouble();
@@ -93,6 +105,7 @@ public class Pelicula implements Parcelable {
         caratula = in.readString();
         sinopsis = in.readString();
         ano = in.readString();
+        imagen = (Bitmap) in.readValue(Bitmap.class.getClassLoader());
     }
 
     @Override
@@ -108,6 +121,7 @@ public class Pelicula implements Parcelable {
         dest.writeString(caratula);
         dest.writeString(sinopsis);
         dest.writeString(ano);
+        dest.writeValue(imagen);
     }
 
     @SuppressWarnings("unused")

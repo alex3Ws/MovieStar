@@ -1,6 +1,7 @@
 package com.example.moviestar.moviestar.Fragments;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,6 +22,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.moviestar.moviestar.Adapter.RecyclerViewAdapter;
@@ -31,7 +34,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-
 
 public class FPeliculas extends Fragment implements Response.Listener<JSONObject>, Response.ErrorListener{
 
@@ -46,6 +48,8 @@ public class FPeliculas extends Fragment implements Response.Listener<JSONObject
     RecyclerViewAdapter adapter;
     int currentItems, totalItems,scrollOutItems;
     GridLayoutManager manager;
+    ProgressBar progressBar;
+
 
 
     @Override
@@ -67,7 +71,11 @@ public class FPeliculas extends Fragment implements Response.Listener<JSONObject
         adapter = new RecyclerViewAdapter(getContext(), R.layout.peliculasview, listaPeliculas);
         recycledPeliculas.setAdapter(adapter);
 
+        adapter.notifyDataSetChanged();
 
+        progressBar = vista.findViewById(R.id.progreso);
+
+        progressBar.setVisibility(View.VISIBLE);
 
         llamarApi();
 
@@ -92,7 +100,7 @@ public class FPeliculas extends Fragment implements Response.Listener<JSONObject
     @Override
     public void onResponse(JSONObject response) {
 
-
+        Bitmap a;
         JSONArray json = null;
         json = response.optJSONArray("results");
 
@@ -101,7 +109,7 @@ public class FPeliculas extends Fragment implements Response.Listener<JSONObject
 
             for(int i=0;i<json.length();i++){
 
-                Pelicula p = new Pelicula();
+                final Pelicula p = new Pelicula();
 
                 JSONObject jsonObject = null;
 
@@ -113,6 +121,25 @@ public class FPeliculas extends Fragment implements Response.Listener<JSONObject
                 p.setCaratula(jsonObject.optString("poster_path"));
                 p.setSinopsis(jsonObject.optString("overview"));
                 p.setAno(jsonObject.optString("release_date"));
+
+                String imagen = p.getCaratula();
+                ImageRequest imageRequest = new ImageRequest(imagen, new Response.Listener<Bitmap>() {
+                    @Override
+                    public void onResponse(Bitmap response) {
+
+                        Bitmap scaledBitmap = scaleDown(response, true);
+                        p.setImagen(scaledBitmap);
+
+                    }
+                }, 0, 0, ImageView.ScaleType.CENTER, null, new Response.ErrorListener() {
+
+                    public void onErrorResponse (VolleyError error){
+
+                        Toast.makeText(getContext(),"Error al cargar la imagen", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                request.add(imageRequest);
 
                 JSONArray json2 = null;
                 json2 = jsonObject.optJSONArray("genre_ids");
@@ -136,8 +163,8 @@ public class FPeliculas extends Fragment implements Response.Listener<JSONObject
         }
 
 
-
         adapter.notifyDataSetChanged();
+
         recycledPeliculas.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -168,10 +195,22 @@ public class FPeliculas extends Fragment implements Response.Listener<JSONObject
             }
         });
 
+        progressBar.setVisibility(View.GONE);
+
+    }
+    public static Bitmap scaleDown(Bitmap realImage,
+                                   boolean filter) {
+        int width = 320;
+        int height = 270;
+
+        Bitmap newBitmap = Bitmap.createScaledBitmap(realImage, width,
+                height, filter);
+        return newBitmap;
     }
 
     @Override
     public void onErrorResponse(VolleyError error) {
+        progressBar.setVisibility(View.GONE);
         Toast.makeText(getContext(),"Error", Toast.LENGTH_LONG).show();
 
     }

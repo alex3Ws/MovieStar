@@ -3,6 +3,7 @@ package com.example.moviestar.moviestar.Adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -76,33 +77,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         public void bind(final Pelicula pelicula){
 
-            String imagen = pelicula.getCaratula();
 
 
-            imageView = itemView.findViewById(R.id.caratula);
-
-            ImageRequest imageRequest = new ImageRequest(imagen, new Response.Listener<Bitmap>() {
-                @Override
-                    public void onResponse(Bitmap response) {
-
-                    Bitmap scaledBitmap = scaleDown(response, 300, true);
-
-                    imageView.setImageBitmap(scaledBitmap);
-
-                    }
-                }, 0, 0, ImageView.ScaleType.CENTER, null, new Response.ErrorListener() {
-
-                    public void onErrorResponse (VolleyError error){
-
-                        Toast.makeText(context,"Error al cargar la imagen", Toast.LENGTH_SHORT).show();
-                    }
-            });
-
-            request.add(imageRequest);
-
+             imageView = itemView.findViewById(R.id.caratula);
              titulo =  itemView.findViewById(R.id.titulo);
              valoracion = itemView.findViewById(R.id.valoracion);
 
+             imageView.setImageBitmap(pelicula.getImagen());
              titulo.setText(pelicula.getTitulo());
              valoracion.setText(String.valueOf(pelicula.getValoracion()));
 
@@ -120,16 +101,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         }
 
-    }
-
-    public static Bitmap scaleDown(Bitmap realImage, float maxImageSize,
-                                   boolean filter) {
-        int width = 320;
-        int height = 270;
-
-        Bitmap newBitmap = Bitmap.createScaledBitmap(realImage, width,
-                height, filter);
-        return newBitmap;
     }
 
 }
