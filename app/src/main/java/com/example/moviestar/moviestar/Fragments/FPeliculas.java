@@ -58,18 +58,21 @@ public class FPeliculas extends Fragment implements Response.Listener<JSONObject
 
         vista=inflater.inflate(R.layout.fragment_peliculas, container, false);
 
-
-
         listaPeliculas = new ArrayList<>();
         listaGeneros = new ArrayList<>();
 
         request =  Volley.newRequestQueue(getContext());
 
         recycledPeliculas = vista.findViewById(R.id.recycledView);
+
         manager = new GridLayoutManager(getContext(), 2);
+        recycledPeliculas.setHasFixedSize(true);
         recycledPeliculas.setLayoutManager(manager);
-        adapter = new RecyclerViewAdapter(getContext(), R.layout.peliculasview, listaPeliculas);
+
+        adapter = new RecyclerViewAdapter(getContext(), listaPeliculas);
         recycledPeliculas.setAdapter(adapter);
+
+
 
         adapter.notifyDataSetChanged();
 
@@ -78,7 +81,6 @@ public class FPeliculas extends Fragment implements Response.Listener<JSONObject
         progressBar.setVisibility(View.VISIBLE);
 
         llamarApi();
-
 
 
         return vista;
@@ -100,7 +102,6 @@ public class FPeliculas extends Fragment implements Response.Listener<JSONObject
     @Override
     public void onResponse(JSONObject response) {
 
-        Bitmap a;
         JSONArray json = null;
         json = response.optJSONArray("results");
 
@@ -108,7 +109,7 @@ public class FPeliculas extends Fragment implements Response.Listener<JSONObject
         try {
 
             for(int i=0;i<json.length();i++){
-
+                Bitmap bitmap;
                 final Pelicula p = new Pelicula();
 
                 JSONObject jsonObject = null;
@@ -127,8 +128,8 @@ public class FPeliculas extends Fragment implements Response.Listener<JSONObject
                     @Override
                     public void onResponse(Bitmap response) {
 
-                        Bitmap scaledBitmap = scaleDown(response, true);
-                        p.setImagen(scaledBitmap);
+                        p.setImagen(scaleDown(response, true));
+
 
                     }
                 }, 0, 0, ImageView.ScaleType.CENTER, null, new Response.ErrorListener() {
@@ -156,6 +157,8 @@ public class FPeliculas extends Fragment implements Response.Listener<JSONObject
                 listaPeliculas.add(p);
             }
 
+            adapter.notifyDataSetChanged();
+
 
 
         } catch (JSONException e) {
@@ -163,9 +166,9 @@ public class FPeliculas extends Fragment implements Response.Listener<JSONObject
         }
 
 
-        adapter.notifyDataSetChanged();
 
-        recycledPeliculas.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+        /*recycledPeliculas.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
@@ -193,11 +196,12 @@ public class FPeliculas extends Fragment implements Response.Listener<JSONObject
 
                 }
             }
-        });
+        });*/
 
         progressBar.setVisibility(View.GONE);
 
     }
+    
     public static Bitmap scaleDown(Bitmap realImage,
                                    boolean filter) {
         int width = 320;
