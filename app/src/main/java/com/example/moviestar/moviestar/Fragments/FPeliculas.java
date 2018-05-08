@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.CircularProgressDrawable;
 import android.support.v7.widget.GridLayoutManager;
@@ -109,7 +110,6 @@ public class FPeliculas extends Fragment implements Response.Listener<JSONObject
         try {
 
             for(int i=0;i<json.length();i++){
-                Bitmap bitmap;
                 final Pelicula p = new Pelicula();
 
                 JSONObject jsonObject = null;
@@ -123,25 +123,6 @@ public class FPeliculas extends Fragment implements Response.Listener<JSONObject
                 p.setSinopsis(jsonObject.optString("overview"));
                 p.setAno(jsonObject.optString("release_date"));
 
-                String imagen = p.getCaratula();
-                ImageRequest imageRequest = new ImageRequest(imagen, new Response.Listener<Bitmap>() {
-                    @Override
-                    public void onResponse(Bitmap response) {
-
-                        p.setImagen(scaleDown(response, true));
-
-
-                    }
-                }, 0, 0, ImageView.ScaleType.CENTER, null, new Response.ErrorListener() {
-
-                    public void onErrorResponse (VolleyError error){
-
-                        Toast.makeText(getContext(),"Error al cargar la imagen", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-                request.add(imageRequest);
-
                 JSONArray json2 = null;
                 json2 = jsonObject.optJSONArray("genre_ids");
 
@@ -152,12 +133,14 @@ public class FPeliculas extends Fragment implements Response.Listener<JSONObject
                     listaGeneros = obtenerGeneros(genero_id);
 
                 }
+
                 p.setGeneros(listaGeneros);
 
                 listaPeliculas.add(p);
+
+
             }
 
-            adapter.notifyDataSetChanged();
 
 
 
@@ -168,7 +151,7 @@ public class FPeliculas extends Fragment implements Response.Listener<JSONObject
 
 
 
-        /*recycledPeliculas.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        recycledPeliculas.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
@@ -194,23 +177,17 @@ public class FPeliculas extends Fragment implements Response.Listener<JSONObject
                     isScrolling = false;
                     llamarApi();
 
+
+
                 }
             }
-        });*/
+        });
 
+        adapter.notifyDataSetChanged();
         progressBar.setVisibility(View.GONE);
 
     }
-    
-    public static Bitmap scaleDown(Bitmap realImage,
-                                   boolean filter) {
-        int width = 320;
-        int height = 270;
 
-        Bitmap newBitmap = Bitmap.createScaledBitmap(realImage, width,
-                height, filter);
-        return newBitmap;
-    }
 
     @Override
     public void onErrorResponse(VolleyError error) {
@@ -284,5 +261,13 @@ public class FPeliculas extends Fragment implements Response.Listener<JSONObject
         }
 
         return generos;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        adapter.notifyDataSetChanged();
+
     }
 }

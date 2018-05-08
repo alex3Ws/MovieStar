@@ -23,6 +23,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.moviestar.moviestar.Entidades.Pelicula;
 import com.example.moviestar.moviestar.InfoPeliculas;
 import com.example.moviestar.moviestar.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -30,10 +31,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     private Context context;
     private ArrayList<Pelicula> peliculas;
+    RequestQueue request;
 
     public RecyclerViewAdapter(Context context,ArrayList<Pelicula> peliculas){
         this.context = context;
         this.peliculas = peliculas;
+        this.request = Volley.newRequestQueue(context);
     }
 
     @NonNull
@@ -53,9 +56,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.titulo.setText(pelicula.getTitulo());
         holder.valoracion.setText(String.valueOf(pelicula.getValoracion()));
 
-        if(pelicula.getImagen() != null){
+        if(pelicula.getCaratula() != null){
 
-            holder.imageView.setImageBitmap(pelicula.getImagen());
+            Picasso.get().load(pelicula.getCaratula()).placeholder(context.getResources().getDrawable(R.drawable.cinefondo)).error(context.getResources().getDrawable(R.drawable.cinefondo)).resize(500,600).into(holder.imageView);
 
         }
         else{
@@ -64,17 +67,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         }
 
-        /*holder.imageView.setOnClickListener(new View.OnClickListener() {
+        holder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent intent = new Intent(context, InfoPeliculas.class);
 
-                intent.putExtra("Peli",pelicula);
+                intent.putExtra("Peli", pelicula);
 
                 context.startActivity(intent);
+
             }
-        });*/
+        });
 
     }
 

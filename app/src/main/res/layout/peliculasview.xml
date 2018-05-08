@@ -13,14 +13,14 @@
     <RelativeLayout
         android:id="@+id/prueba"
         android:layout_width="176dp"
-        android:layout_height="196dp"
+        android:layout_height="246dp"
         android:layout_margin="2dp">
 
 
         <ImageView
             android:id="@+id/caratula"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="200dp"
             android:layout_margin="2dp"
             app:srcCompat="@drawable/ic_launcher_background" />
 
