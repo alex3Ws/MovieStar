@@ -16,20 +16,22 @@ public class Pelicula implements Parcelable {
     private String sinopsis;
     private String ano;
     private Bitmap imagen;
+    private String trailer;
 
     public Pelicula(){
 
     }
 
-    public Pelicula(int id, double valoracion, String titulo, String caratula, ArrayList<String> generos, String sinopsis, String ano,Bitmap imagen) {
+    public Pelicula(int id, double valoracion, String titulo, String caratula, ArrayList<String> generos, String sinopsis, String ano,Bitmap imagen, String trailer) {
         this.id = id;
         this.valoracion = valoracion;
         this.titulo = titulo;
-        this.caratula = caratula;
+        this.caratula = this.caratula + caratula;
         this.generos = generos;
         this.sinopsis = sinopsis;
         this.ano = ano;
         this.imagen = imagen;
+        this.trailer = this.trailer + trailer;
     }
 
     public int getId() {
@@ -97,6 +99,14 @@ public class Pelicula implements Parcelable {
         this.imagen = imagen;
     }
 
+    public String getTrailer() {
+        return trailer;
+    }
+
+    public void setTrailer(String trailer) {
+        this.trailer = this.trailer + trailer;
+    }
+
 
     protected Pelicula(Parcel in) {
         id = in.readInt();
@@ -106,6 +116,7 @@ public class Pelicula implements Parcelable {
         sinopsis = in.readString();
         ano = in.readString();
         imagen = (Bitmap) in.readValue(Bitmap.class.getClassLoader());
+        trailer = in.readString();
     }
 
     @Override
@@ -122,6 +133,7 @@ public class Pelicula implements Parcelable {
         dest.writeString(sinopsis);
         dest.writeString(ano);
         dest.writeValue(imagen);
+        dest.writeString(trailer);
     }
 
     @SuppressWarnings("unused")

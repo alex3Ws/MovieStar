@@ -25,14 +25,13 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".MainActivity"
-            android:label="MovieStar"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:configChanges="keyboardHidden|orientation|screenSize"/>
-
-        <activity android:name=".InfoPeliculas"
-            android:theme="@style/AppTheme.NoActionBarPelis"
-            android:label="Información"/>
-
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="@string/title_activity_main"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".InfoPeliculas"
+            android:label="@string/title_activity_info_peliculas"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

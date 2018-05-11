@@ -1,14 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Fragments.FDatosPeli">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
 
-</FrameLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="600dp">
+
+        <TextView
+            android:id="@+id/tvTituloOriginal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="23dp"
+            android:layout_marginTop="15dp"
+            android:text="Titulo original: "
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvTituloOriginal2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignStart="@+id/tvTituloOriginal"
+            android:layout_marginTop="43dp"
+            android:text="Avengers: Infinity War" />
+
+        <TextView
+            android:id="@+id/tvCompañias"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignTop="@+id/tvTituloOriginal"
+            android:layout_marginEnd="118dp"
+            android:text="Compañias:"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvCompañias2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/tvCompañias"
+            android:layout_alignTop="@+id/tvTituloOriginal2"
+            android:text="Walt Disney Pictures, Marvel Studios" />
+
+        <TextView
+            android:id="@+id/tvGenero"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignStart="@+id/tvTituloOriginal2"
+            android:layout_marginTop="106dp"
+            android:text="Género: "
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvGenero2"
+            android:layout_width="190dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignStart="@+id/tvTituloOriginal2"
+            android:layout_marginTop="135dp"
+            android:text="Accion, Ciencia Ficcion, Fantasia, Amor" />
+
+        <TextView
+            android:id="@+id/tvPais"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/tvCompañias"
+            android:layout_alignTop="@+id/tvGenero"
+            android:text="País: "
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvPais2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/tvCompañias"
+            android:layout_alignTop="@+id/tvGenero2"
+            android:text="Estados Unidos" />
+
+        <TextView
+            android:id="@+id/tvActores"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignStart="@+id/tvTituloOriginal2"
+            android:layout_marginTop="190dp"
+            android:text="Actores: "
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvActores2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignStart="@+id/tvTituloOriginal2"
+            android:layout_marginTop="217dp"
+            android:text="Alejandro Rosa Gail, Salobrar Vicente Vallinot, Maria del Mar Carros Simon, Bryan Agi, Adrián Huerta Berrocal" />
+
+        <TextView
+            android:id="@+id/tvSinopsis"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/tvTituloOriginal2"
+            android:layout_centerVertical="true"
+            android:text="Actores: "
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvSinopsis2"
+            android:layout_width="374dp"
+            android:layout_height="281dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="0dp"
+            android:layout_marginStart="25dp"
+            android:text="Vengadores: Infinity War seguirá la lucha de los superhéroes de Marvel contra el mayor villano al que se han enfrentado nunca: Thanos. Su único objetivo será detener a este poderoso antagonista e impedir que se haga con el control de la galaxia. De nuevo veremos al grupo formado por Iron Man, Capitán América, Viuda negra, Ant-Man, Ojo de Halcón, Thor y Hulk, entre otros. En su nueva e impactante aventura, las Gemas del Infinito estarán en juego, unos querrán protegerlas y otros controlarlas, ¿quién ganará?" />
+
+    </RelativeLayout>
+</ScrollView>
