@@ -50,8 +50,9 @@ public class FDatosPeli extends Fragment {
         titulo_original= vista.findViewById(R.id.tvTituloOriginal2);
         compañias = vista.findViewById(R.id.tvCompañias2);
         generos = vista.findViewById(R.id.tvGenero2);
-        pais = vista.findViewById(R.id.tvActores2);
+        pais = vista.findViewById(R.id.tvPais2);
         sinopsis = vista.findViewById(R.id.tvSinopsis2);
+        actores = vista.findViewById(R.id.tvActores2);
 
         cargarDatos();
 
@@ -76,7 +77,10 @@ public class FDatosPeli extends Fragment {
                 json = null;
                 json = jsonArrayComp.getJSONObject(i);
 
-                texto = texto + json.optString("name") + ", ";
+                if(i != (jsonArrayComp.length() - 1))
+                    texto = texto + json.optString("name") + ", ";
+                else
+                    texto = texto + json.optString("name");
             }
 
             compañias.setText(texto);
@@ -98,7 +102,10 @@ public class FDatosPeli extends Fragment {
                 json = null;
                 json = jsonArrayGen.getJSONObject(i);
 
-                texto = texto + json.optString("name") + ", ";
+                if(i != (jsonArrayComp.length() - 1))
+                    texto = texto + json.optString("name") + ", ";
+                else
+                    texto = texto + json.optString("name");
 
             }
 
@@ -109,7 +116,7 @@ public class FDatosPeli extends Fragment {
             generos.setText("No se han podido recuperar los géneros");
         }
 
-        JSONArray jsonArrayPais = jsonObject.optJSONArray("genres");
+        JSONArray jsonArrayPais = jsonObject.optJSONArray("production_countries");
         texto = "";
 
         try {
@@ -119,7 +126,10 @@ public class FDatosPeli extends Fragment {
                 json = null;
                 json = jsonArrayPais.getJSONObject(i);
 
-                texto = texto + json.optString("name") + ", ";
+                if(i != (jsonArrayComp.length() - 1))
+                    texto = texto + json.optString("name") + ", ";
+                else
+                    texto = texto + json.optString("name");
 
             }
 
