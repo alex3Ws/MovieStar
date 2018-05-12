@@ -59,12 +59,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         }
 
+
         holder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, InfoPeliculas.class);
 
-                intent.putExtra("Peli", pelicula);
+                intent.putExtra("id",String.valueOf(pelicula.getId()));
 
                 context.startActivity(intent);
 

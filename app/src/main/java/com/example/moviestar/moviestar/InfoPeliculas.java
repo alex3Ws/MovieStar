@@ -1,5 +1,7 @@
 package com.example.moviestar.moviestar;
 
+import android.graphics.Color;
+import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -18,20 +20,40 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.moviestar.moviestar.Entidades.Pelicula;
 import com.example.moviestar.moviestar.Fragments.FCriticasPeli;
 import com.example.moviestar.moviestar.Fragments.FDatosPeli;
 import com.example.moviestar.moviestar.Fragments.FTrailerPeli;
+import com.squareup.picasso.Picasso;
 
-public class InfoPeliculas extends AppCompatActivity {
+
+import org.json.JSONObject;
+import org.json.JSONStringer;
+
+
+
+public class InfoPeliculas extends AppCompatActivity implements Response.Listener<JSONObject>, Response.ErrorListener{
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
 
+    RequestQueue request;
+    JsonObjectRequest jsonObjectRequest;
+    String id;
+    JSONObject jsonObject;
+    String urlBaseImagenes = "http://image.tmdb.org/t/p/w500";
     TextView titulo;
-    Pelicula pelicula;
+    ImageView fondo, imagen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,13 +87,57 @@ public class InfoPeliculas extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back);
 
+        int myColor = Color.parseColor("#303F9F");
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            getWindow().setStatusBarColor(myColor);
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(myColor);
+        }
 
 
-        titulo = findViewById(R.id.pruebat);
+        request =  Volley.newRequestQueue(getApplicationContext());
 
-        pelicula = getIntent().getExtras().getParcelable("Peli");
+        titulo = findViewById(R.id.tvTitulo);
+        fondo = findViewById(R.id.ivfondo);
+        imagen = findViewById(R.id.imcaratula);
 
-        titulo.setText(pelicula.getTitulo());
+        id = getIntent().getStringExtra("id");
+
+        llamarApi();
+
+    }
+
+    private void llamarApi() {
+
+        String url  = "https://api.themoviedb.org/3/movie/"+id+"?api_key=a2424ed363ead46acaa726cf8cb45bad&language=es-ES";
+
+
+        jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,url,null,this,this);
+        request.add(jsonObjectRequest);
+
+    }
+
+    @Override
+    public void onResponse(JSONObject response) {
+
+        Toast.makeText(getApplicationContext(),"AHHHH",Toast.LENGTH_SHORT).show();
+
+        jsonObject = response;
+
+        Picasso.get().load(urlBaseImagenes+response.optString("backdrop_path")).placeholder(getApplicationContext().getResources().getDrawable(R.drawable.cinefondo)).error(getApplicationContext().getResources().getDrawable(R.drawable.cinefondo)).resize(1100,605).into(fondo);
+
+
+        Picasso.get().load(urlBaseImagenes+response.optString("poster_path")).placeholder(getApplicationContext().getResources().getDrawable(R.drawable.cinefondo)).error(getApplicationContext().getResources().getDrawable(R.drawable.cinefondo)).resize(520,600).into(imagen);
+
+        titulo.setText(jsonObject.optString("title"));
+
+    }
+    @Override
+    public void onErrorResponse(VolleyError error) {
+
+        Toast.makeText(getApplicationContext(),"Error",Toast.LENGTH_SHORT).show();
+
 
     }
 
@@ -143,12 +209,14 @@ public class InfoPeliculas extends AppCompatActivity {
             //return PlaceholderFragment.newInstance(position + 1);
 
             Bundle info = new Bundle();
-            info.putParcelable("Info",pelicula);
+
 
                 switch (position){
 
                     case 0:
                             FDatosPeli fDatosPeli = new FDatosPeli();
+                            String jsonString = jsonObject.toString();
+                            info.putString("jsonObject", jsonString);
                             fDatosPeli.setArguments(info);
                             return fDatosPeli;
 

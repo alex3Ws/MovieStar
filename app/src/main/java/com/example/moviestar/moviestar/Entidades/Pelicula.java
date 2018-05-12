@@ -1,6 +1,5 @@
 package com.example.moviestar.moviestar.Entidades;
 
-import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -11,27 +10,26 @@ public class Pelicula implements Parcelable {
     private int id;
     private double valoracion;
     private String titulo;
+    private String titulo_original;
     private String caratula = "http://image.tmdb.org/t/p/w500";
     private ArrayList<String> generos;
     private String sinopsis;
     private String ano;
-    private Bitmap imagen;
-    private String trailer;
+
 
     public Pelicula(){
 
     }
 
-    public Pelicula(int id, double valoracion, String titulo, String caratula, ArrayList<String> generos, String sinopsis, String ano,Bitmap imagen, String trailer) {
+    public Pelicula(int id, double valoracion, String titulo, String titulo_original, String caratula, ArrayList<String> generos, String sinopsis, String ano) {
         this.id = id;
         this.valoracion = valoracion;
         this.titulo = titulo;
+        this.titulo_original = titulo_original;
         this.caratula = this.caratula + caratula;
         this.generos = generos;
         this.sinopsis = sinopsis;
         this.ano = ano;
-        this.imagen = imagen;
-        this.trailer = this.trailer + trailer;
     }
 
     public int getId() {
@@ -58,6 +56,14 @@ public class Pelicula implements Parcelable {
         this.titulo = titulo;
     }
 
+    public String getTitulo_original() {
+        return titulo_original;
+    }
+
+    public void setTitulo_original(String titulo_original) {
+        this.titulo_original = titulo_original;
+    }
+
     public String getCaratula() {
         return caratula;
     }
@@ -72,7 +78,6 @@ public class Pelicula implements Parcelable {
 
     public void setGeneros(ArrayList<String> generos) {
         this.generos = generos;
-
     }
 
     public String getSinopsis() {
@@ -91,32 +96,21 @@ public class Pelicula implements Parcelable {
         this.ano = ano;
     }
 
-    public Bitmap getImagen() {
-        return imagen;
-    }
-
-    public void setImagen(Bitmap imagen) {
-        this.imagen = imagen;
-    }
-
-    public String getTrailer() {
-        return trailer;
-    }
-
-    public void setTrailer(String trailer) {
-        this.trailer = this.trailer + trailer;
-    }
-
 
     protected Pelicula(Parcel in) {
         id = in.readInt();
         valoracion = in.readDouble();
         titulo = in.readString();
+        titulo_original = in.readString();
         caratula = in.readString();
+        if (in.readByte() == 0x01) {
+            generos = new ArrayList<String>();
+            in.readList(generos, String.class.getClassLoader());
+        } else {
+            generos = null;
+        }
         sinopsis = in.readString();
         ano = in.readString();
-        imagen = (Bitmap) in.readValue(Bitmap.class.getClassLoader());
-        trailer = in.readString();
     }
 
     @Override
@@ -129,11 +123,16 @@ public class Pelicula implements Parcelable {
         dest.writeInt(id);
         dest.writeDouble(valoracion);
         dest.writeString(titulo);
+        dest.writeString(titulo_original);
         dest.writeString(caratula);
+        if (generos == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(generos);
+        }
         dest.writeString(sinopsis);
         dest.writeString(ano);
-        dest.writeValue(imagen);
-        dest.writeString(trailer);
     }
 
     @SuppressWarnings("unused")

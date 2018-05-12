@@ -119,6 +119,7 @@ public class FPeliculas extends Fragment implements Response.Listener<JSONObject
                 p.setId(jsonObject.optInt("id"));
                 p.setValoracion(jsonObject.optDouble("vote_average"));
                 p.setTitulo(jsonObject.optString("title"));
+                p.setTitulo_original(jsonObject.optString("original_title"));
                 p.setCaratula(jsonObject.optString("poster_path"));
                 p.setSinopsis(jsonObject.optString("overview"));
                 p.setAno(jsonObject.optString("release_date"));

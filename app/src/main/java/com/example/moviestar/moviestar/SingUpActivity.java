@@ -17,6 +17,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.moviestar.moviestar.Encrypter.Encriptar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,6 +32,8 @@ public class SingUpActivity extends AppCompatActivity implements Response.Listen
     RequestQueue request;
     JsonObjectRequest jsonObjectRequest;
     Intent abrirLogin;
+    String Tnombre, Temail,Tcontrasena;
+    Encriptar encriptar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,10 +101,29 @@ public class SingUpActivity extends AppCompatActivity implements Response.Listen
         contrasena.setFocusable(false);
         repetircontrasena.setFocusable(false);
 
+        /*Tnombre = nombre.getText().toString();
+        Temail = email.getText().toString();
+        Tcontrasena = contrasena.getText().toString();
+
+        encriptar = new Encriptar();
+
+        encriptar.setTexto(Tnombre);
+        Tnombre = null;
+        Tnombre = encriptar.encriptar();
+
+        encriptar.setTexto(Temail);
+        Temail = null;
+        Temail = encriptar.encriptar();
+
+        encriptar.setTexto(Tcontrasena);
+        Tcontrasena = null;
+        Tcontrasena = encriptar.encriptar();*/
+
+
         String url = getString(R.string.url);
 
-        url  = url +"/RegistrarUsuario.php?nombre="+nombre.getText().toString()+
-                "&email="+email.getText().toString()+"&contrasena="+contrasena.getText().toString();
+        url  = url +"/RegistrarUsuario.php?nombre="+Tnombre+
+                "&email="+Temail+"&contrasena="+Tcontrasena;
 
         /*String url = "http://192.168.140.1/WebServices_PHP/RegistrarUsuario.php?nombre="+nombre.getText().toString()+
                 "&email="+email.getText().toString()+"&contrasena="+contrasena.getText().toString();*/
