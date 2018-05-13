@@ -37,6 +37,7 @@ import com.example.moviestar.moviestar.Fragments.FTrailerPeli;
 import com.squareup.picasso.Picasso;
 
 
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONStringer;
 
@@ -44,13 +45,12 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 
-public class InfoPeliculas extends AppCompatActivity implements Response.Listener<JSONObject>, Response.ErrorListener{
+public class InfoPeliculas extends AppCompatActivity {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
 
-    RequestQueue request;
-    JsonObjectRequest jsonObjectRequest;
+
     String id;
     JSONObject jsonObject;
     String urlBaseImagenes = "http://image.tmdb.org/t/p/w500";
@@ -103,58 +103,35 @@ public class InfoPeliculas extends AppCompatActivity implements Response.Listene
             getWindow().setStatusBarColor(myColor);
         }
 
-        request =  Volley.newRequestQueue(getApplicationContext());
 
         titulo = findViewById(R.id.tvTitulo);
         fondo = findViewById(R.id.ivfondo);
         imagen = findViewById(R.id.imcaratula);
 
-        id = getIntent().getStringExtra("id");
+        String json = getIntent().getStringExtra("json");
+
+        try {
+            jsonObject = new JSONObject(json);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         tabLayout.addTab(tabLayout.newTab().setText("Datos"));
         tabLayout.addTab(tabLayout.newTab().setText("Trailers"));
         tabLayout.addTab(tabLayout.newTab().setText("Criticas"));
 
-        llamarApi();
-
-    }
-
-    private void llamarApi() {
-
-        final JSONObject prueba;
-        String url  = "https://api.themoviedb.org/3/movie/"+id+"?api_key=a2424ed363ead46acaa726cf8cb45bad&language=es-ES";
+        id = getIntent().getStringExtra("id");
 
 
-        jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,url,null,this,this);
-        request.add(jsonObjectRequest);
-
-    }
-
-    @Override
-    public void onResponse(JSONObject response) {
-
-        Toast.makeText(getApplicationContext(),"AHHHH",Toast.LENGTH_SHORT).show();
-
-        jsonObject = response;
-
-        Picasso.get().load(urlBaseImagenes+response.optString("backdrop_path")).placeholder(getApplicationContext().getResources().getDrawable(R.drawable.cinefondo)).error(getApplicationContext().getResources().getDrawable(R.drawable.cinefondo)).resize(1100,605).into(fondo);
+        Picasso.get().load(urlBaseImagenes+jsonObject.optString("backdrop_path")).placeholder(getApplicationContext().getResources().getDrawable(R.drawable.cinefondo)).error(getApplicationContext().getResources().getDrawable(R.drawable.cinefondo)).resize(1100,605).into(fondo);
 
 
-        Picasso.get().load(urlBaseImagenes+response.optString("poster_path")).placeholder(getApplicationContext().getResources().getDrawable(R.drawable.cinefondo)).error(getApplicationContext().getResources().getDrawable(R.drawable.cinefondo)).resize(520,670).into(imagen);
+        Picasso.get().load(urlBaseImagenes+jsonObject.optString("poster_path")).placeholder(getApplicationContext().getResources().getDrawable(R.drawable.cinefondo)).error(getApplicationContext().getResources().getDrawable(R.drawable.cinefondo)).resize(520,680).into(imagen);
 
         titulo.setText(jsonObject.optString("title"));
 
 
-
     }
-    @Override
-    public void onErrorResponse(VolleyError error) {
-
-        Toast.makeText(getApplicationContext(),"Error",Toast.LENGTH_SHORT).show();
-
-
-    }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -233,8 +210,7 @@ public class InfoPeliculas extends AppCompatActivity implements Response.Listene
 
                             FDatosPeli fDatosPeli = new FDatosPeli();
 
-                            //String jsonString = jsonObject.toString();
-                            //info.putString("jsonObject", jsonString);
+                            info.putString("jsonObject", jsonObject.toString());
                             fDatosPeli.setArguments(info);
 
                             return fDatosPeli;
@@ -243,6 +219,7 @@ public class InfoPeliculas extends AppCompatActivity implements Response.Listene
                     case 1:
 
                             FTrailerPeli fTrailerPeli = new FTrailerPeli();
+
                             info.putString("id",id);
                             fTrailerPeli.setArguments(info);
 

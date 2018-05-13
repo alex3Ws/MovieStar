@@ -45,14 +45,14 @@ public class FDatosPeli extends Fragment {
 
 
 
-        /*try {
+        try {
               String jsonString = getArguments().getString("jsonObject");
               jsonObject = new JSONObject(jsonString);
 
         } catch (JSONException e) {
 
             e.printStackTrace();
-        }*/
+        }
 
 
         titulo_original= vista.findViewById(R.id.tvTituloOriginal2);
@@ -62,7 +62,7 @@ public class FDatosPeli extends Fragment {
         sinopsis = vista.findViewById(R.id.tvSinopsis2);
         actores = vista.findViewById(R.id.tvActores2);
 
-        //cargarDatos();
+        cargarDatos();
 
         return vista;
     }
