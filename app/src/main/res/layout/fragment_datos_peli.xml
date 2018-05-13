@@ -19,7 +19,8 @@
             android:layout_marginStart="23dp"
             android:layout_marginTop="15dp"
             android:text="Titulo original: "
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textSize="16sp"/>
 
         <TextView
             android:id="@+id/tvTituloOriginal2"
@@ -38,7 +39,8 @@
             android:layout_alignTop="@+id/tvTituloOriginal"
             android:layout_marginEnd="118dp"
             android:text="Compañias:"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textSize="16sp"/>
 
         <TextView
             android:id="@+id/tvCompañias2"
@@ -56,7 +58,8 @@
             android:layout_alignStart="@+id/tvTituloOriginal2"
             android:layout_marginTop="106dp"
             android:text="Género: "
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textSize="16sp"/>
 
         <TextView
             android:id="@+id/tvGenero2"
@@ -74,7 +77,8 @@
             android:layout_alignStart="@+id/tvCompañias"
             android:layout_alignTop="@+id/tvGenero"
             android:text="País: "
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textSize="16sp"/>
 
         <TextView
             android:id="@+id/tvPais2"
@@ -82,7 +86,7 @@
             android:layout_height="wrap_content"
             android:layout_alignStart="@+id/tvCompañias"
             android:layout_alignTop="@+id/tvGenero2"
-            android:text="Estados Unidos" />
+            android:text="Estados Unidos"/>
 
         <TextView
             android:id="@+id/tvActores"
@@ -92,7 +96,8 @@
             android:layout_alignStart="@+id/tvTituloOriginal2"
             android:layout_marginTop="190dp"
             android:text="Actores: "
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textSize="16sp"/>
 
         <TextView
             android:id="@+id/tvActores2"
@@ -110,7 +115,8 @@
             android:layout_alignStart="@+id/tvTituloOriginal2"
             android:layout_centerVertical="true"
             android:text="Sinopsis: "
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textSize="16sp"/>
 
         <TextView
             android:id="@+id/tvSinopsis2"

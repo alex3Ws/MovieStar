@@ -22,6 +22,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class FDatosPeli extends Fragment {
 
     View vista;
@@ -38,14 +41,19 @@ public class FDatosPeli extends Fragment {
 
         vista = inflater.inflate(R.layout.fragment_datos_peli, container, false);
 
-        try {
 
-            String jsonString = getArguments().getString("jsonObject");
-            jsonObject = new JSONObject(jsonString);
+
+
+
+        /*try {
+              String jsonString = getArguments().getString("jsonObject");
+              jsonObject = new JSONObject(jsonString);
 
         } catch (JSONException e) {
+
             e.printStackTrace();
-        }
+        }*/
+
 
         titulo_original= vista.findViewById(R.id.tvTituloOriginal2);
         compañias = vista.findViewById(R.id.tvCompañias2);
@@ -54,7 +62,7 @@ public class FDatosPeli extends Fragment {
         sinopsis = vista.findViewById(R.id.tvSinopsis2);
         actores = vista.findViewById(R.id.tvActores2);
 
-        cargarDatos();
+        //cargarDatos();
 
         return vista;
     }
@@ -102,7 +110,7 @@ public class FDatosPeli extends Fragment {
                 json = null;
                 json = jsonArrayGen.getJSONObject(i);
 
-                if(i != (jsonArrayComp.length() - 1))
+                if(i != (jsonArrayGen.length() - 1))
                     texto = texto + json.optString("name") + ", ";
                 else
                     texto = texto + json.optString("name");
@@ -126,7 +134,7 @@ public class FDatosPeli extends Fragment {
                 json = null;
                 json = jsonArrayPais.getJSONObject(i);
 
-                if(i != (jsonArrayComp.length() - 1))
+                if(i != (jsonArrayPais.length() - 1))
                     texto = texto + json.optString("name") + ", ";
                 else
                     texto = texto + json.optString("name");

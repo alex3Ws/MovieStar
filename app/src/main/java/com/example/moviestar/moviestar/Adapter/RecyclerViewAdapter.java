@@ -23,12 +23,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     private Context context;
     private ArrayList<Pelicula> peliculas;
-    RequestQueue request;
 
     public RecyclerViewAdapter(Context context,ArrayList<Pelicula> peliculas){
         this.context = context;
         this.peliculas = peliculas;
-        this.request = Volley.newRequestQueue(context);
     }
 
     @NonNull

@@ -40,6 +40,8 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONObject;
 import org.json.JSONStringer;
 
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class InfoPeliculas extends AppCompatActivity implements Response.Listener<JSONObject>, Response.ErrorListener{
@@ -57,8 +59,14 @@ public class InfoPeliculas extends AppCompatActivity implements Response.Listene
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info_peliculas);
+
+
+
+
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -95,7 +103,6 @@ public class InfoPeliculas extends AppCompatActivity implements Response.Listene
             getWindow().setStatusBarColor(myColor);
         }
 
-
         request =  Volley.newRequestQueue(getApplicationContext());
 
         titulo = findViewById(R.id.tvTitulo);
@@ -104,12 +111,17 @@ public class InfoPeliculas extends AppCompatActivity implements Response.Listene
 
         id = getIntent().getStringExtra("id");
 
+        tabLayout.addTab(tabLayout.newTab().setText("Datos"));
+        tabLayout.addTab(tabLayout.newTab().setText("Trailers"));
+        tabLayout.addTab(tabLayout.newTab().setText("Criticas"));
+
         llamarApi();
 
     }
 
     private void llamarApi() {
 
+        final JSONObject prueba;
         String url  = "https://api.themoviedb.org/3/movie/"+id+"?api_key=a2424ed363ead46acaa726cf8cb45bad&language=es-ES";
 
 
@@ -128,9 +140,11 @@ public class InfoPeliculas extends AppCompatActivity implements Response.Listene
         Picasso.get().load(urlBaseImagenes+response.optString("backdrop_path")).placeholder(getApplicationContext().getResources().getDrawable(R.drawable.cinefondo)).error(getApplicationContext().getResources().getDrawable(R.drawable.cinefondo)).resize(1100,605).into(fondo);
 
 
-        Picasso.get().load(urlBaseImagenes+response.optString("poster_path")).placeholder(getApplicationContext().getResources().getDrawable(R.drawable.cinefondo)).error(getApplicationContext().getResources().getDrawable(R.drawable.cinefondo)).resize(520,600).into(imagen);
+        Picasso.get().load(urlBaseImagenes+response.optString("poster_path")).placeholder(getApplicationContext().getResources().getDrawable(R.drawable.cinefondo)).error(getApplicationContext().getResources().getDrawable(R.drawable.cinefondo)).resize(520,670).into(imagen);
 
         titulo.setText(jsonObject.optString("title"));
+
+
 
     }
     @Override
@@ -198,9 +212,11 @@ public class InfoPeliculas extends AppCompatActivity implements Response.Listene
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
+
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
+
 
         @Override
         public Fragment getItem(int position) {
@@ -214,14 +230,22 @@ public class InfoPeliculas extends AppCompatActivity implements Response.Listene
                 switch (position){
 
                     case 0:
+
                             FDatosPeli fDatosPeli = new FDatosPeli();
-                            String jsonString = jsonObject.toString();
-                            info.putString("jsonObject", jsonString);
+
+                            //String jsonString = jsonObject.toString();
+                            //info.putString("jsonObject", jsonString);
                             fDatosPeli.setArguments(info);
+
                             return fDatosPeli;
 
+
                     case 1:
+
                             FTrailerPeli fTrailerPeli = new FTrailerPeli();
+                            info.putString("id",id);
+                            fTrailerPeli.setArguments(info);
+
                             return fTrailerPeli;
 
                     case 2:
