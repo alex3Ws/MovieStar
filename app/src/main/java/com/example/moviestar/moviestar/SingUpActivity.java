@@ -17,11 +17,14 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.moviestar.moviestar.Encrypter.Rsa;
+import com.example.moviestar.moviestar.Encrypter.RSAEncrypt;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class SingUpActivity extends AppCompatActivity implements Response.Listener<JSONObject>, Response.ErrorListener{
     TextView login;
@@ -102,31 +105,53 @@ public class SingUpActivity extends AppCompatActivity implements Response.Listen
         repetircontrasena.setFocusable(false);
 
 
-        Rsa codeRsa = new Rsa();
-
+        RSAEncrypt rsa = new RSAEncrypt();
         Tnombre = nombre.getText().toString();
-        EncryptedNombre = codeRsa.encryptByPublic(Tnombre);
+
+        try {
+           EncryptedNombre = rsa.encrypt(Tnombre);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
         Temail = email.getText().toString();
-        EncryptedEmail = codeRsa.encryptByPublic(Temail);
+
+        try {
+           EncryptedEmail = rsa.encrypt(Temail);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
         Tcontrasena = contrasena.getText().toString();
-        EncryptedContrasena = codeRsa.encryptByPublic(Tcontrasena);
 
+        try {
+           EncryptedContrasena = rsa.encrypt(Tcontrasena);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
 
         String url = getString(R.string.url);
 
-        url  = url +"/RegistrarUsuario.php?nombre="+EncryptedNombre+
-                "&email="+EncryptedEmail+"&contrasena="+EncryptedContrasena;
+        /*url  = url +"/RegistrarUsuario.php?nombre="+EncryptedNombre+
+                "&email="+EncryptedEmail+"&contrasena="+EncryptedContrasena;*/
+        url = url + "/RegistrarUsuario.php";
 
-        /*String url = "http://192.168.140.1/WebServices_PHP/RegistrarUsuario.php?nombre="+nombre.getText().toString()+
-                "&email="+email.getText().toString()+"&contrasena="+contrasena.getText().toString();*/
-
-        url = url.replace(" ","%20");
+        //url = url.replace(" ","%20").replace("\n","").replace("+","@");
 
 
-        jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,url,null,this,this);
+        JSONObject parametros = new JSONObject();
+        try {
+            parametros.put("nombre",EncryptedNombre);
+            parametros.put("email",EncryptedEmail);
+            parametros.put("contrasena",EncryptedContrasena);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,url,parametros,this,this);
 
         request.add(jsonObjectRequest);
 
