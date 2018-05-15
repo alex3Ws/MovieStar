@@ -110,6 +110,7 @@ public class SingUpActivity extends AppCompatActivity implements Response.Listen
 
         try {
            EncryptedNombre = rsa.encrypt(Tnombre);
+           EncryptedNombre = EncryptedNombre.replace("\n","").replace("+","@");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -119,6 +120,7 @@ public class SingUpActivity extends AppCompatActivity implements Response.Listen
 
         try {
            EncryptedEmail = rsa.encrypt(Temail);
+           EncryptedEmail = EncryptedEmail.replace("\n","").replace("+","@");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -128,6 +130,7 @@ public class SingUpActivity extends AppCompatActivity implements Response.Listen
 
         try {
            EncryptedContrasena = rsa.encrypt(Tcontrasena);
+           EncryptedContrasena = EncryptedContrasena.replace("\n","").replace("+","@");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -137,9 +140,11 @@ public class SingUpActivity extends AppCompatActivity implements Response.Listen
 
         /*url  = url +"/RegistrarUsuario.php?nombre="+EncryptedNombre+
                 "&email="+EncryptedEmail+"&contrasena="+EncryptedContrasena;*/
-        url = url + "/RegistrarUsuario.php";
-
         //url = url.replace(" ","%20").replace("\n","").replace("+","@");
+
+
+
+        url = url + "/RegistrarUsuario.php";
 
 
         JSONObject parametros = new JSONObject();
