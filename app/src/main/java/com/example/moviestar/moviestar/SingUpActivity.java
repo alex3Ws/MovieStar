@@ -26,7 +26,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SingUpActivity extends AppCompatActivity implements Response.Listener<JSONObject>, Response.ErrorListener{
+public class SingUpActivity extends AppCompatActivity {
     TextView login;
 
     EditText nombre,email,contrasena,repetircontrasena;
@@ -35,8 +35,9 @@ public class SingUpActivity extends AppCompatActivity implements Response.Listen
     RequestQueue request;
     JsonObjectRequest jsonObjectRequest;
     Intent abrirLogin;
-    String Tnombre, Temail,Tcontrasena;
+    String Tnombre, Temail,Tcontrasena,clave,id;
     String EncryptedNombre, EncryptedEmail,EncryptedContrasena;
+    int flag = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,123 +106,158 @@ public class SingUpActivity extends AppCompatActivity implements Response.Listen
         repetircontrasena.setFocusable(false);
 
 
-        RSAEncrypt rsa = new RSAEncrypt();
-        Tnombre = nombre.getText().toString();
-
-        try {
-           EncryptedNombre = rsa.encrypt(Tnombre);
-           EncryptedNombre = EncryptedNombre.replace("\n","").replace("+","@");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
-        Temail = email.getText().toString();
-
-        try {
-           EncryptedEmail = rsa.encrypt(Temail);
-           EncryptedEmail = EncryptedEmail.replace("\n","").replace("+","@");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
-        Tcontrasena = contrasena.getText().toString();
-
-        try {
-           EncryptedContrasena = rsa.encrypt(Tcontrasena);
-           EncryptedContrasena = EncryptedContrasena.replace("\n","").replace("+","@");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
         String url = getString(R.string.url);
 
-        /*url  = url +"/RegistrarUsuario.php?nombre="+EncryptedNombre+
-                "&email="+EncryptedEmail+"&contrasena="+EncryptedContrasena;*/
-        //url = url.replace(" ","%20").replace("\n","").replace("+","@");
+        url = url + "/Claves.php";
 
 
+        jsonObjectRequest = null;
+        jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONArray json = response.getJSONArray("PK");
 
-        url = url + "/RegistrarUsuario.php";
+                    JSONObject json2 = json.getJSONObject(0);
+
+                    id = String.valueOf(json2.optInt("id"));
+
+                    if (!id.equals("No se ha podido generar la clave")) {
+                        clave = json2.optString("clave");
+                        flag = 1;
+                    } else {
+                        flag = 0;
+                    }
 
 
-        JSONObject parametros = new JSONObject();
-        try {
-            parametros.put("nombre",EncryptedNombre);
-            parametros.put("email",EncryptedEmail);
-            parametros.put("contrasena",EncryptedContrasena);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+                    if(flag == 1) {
+                        RSAEncrypt rsa = new RSAEncrypt(clave);
+                        Tnombre = nombre.getText().toString();
 
-        jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,url,parametros,this,this);
+                        try {
+                            EncryptedNombre = rsa.encrypt(Tnombre);
+                            EncryptedNombre = EncryptedNombre.replace("\n", "").replace("+", "@");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
 
+
+                        Temail = email.getText().toString();
+
+                        try {
+                            EncryptedEmail = rsa.encrypt(Temail);
+                            EncryptedEmail = EncryptedEmail.replace("\n", "").replace("+", "@");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+
+                        Tcontrasena = contrasena.getText().toString();
+
+                        try {
+                            EncryptedContrasena = rsa.encrypt(Tcontrasena);
+                            EncryptedContrasena = EncryptedContrasena.replace("\n", "").replace("+", "@");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        String url = getString(R.string.url);
+                        url = url + "/RegistrarUsuario.php";
+
+
+                        JSONObject parametros = new JSONObject();
+                        try {
+                            parametros.put("nombre", EncryptedNombre);
+                            parametros.put("email", EncryptedEmail);
+                            parametros.put("contrasena", EncryptedContrasena);
+                            parametros.put("id", id);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        jsonObjectRequest = null;
+                        jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, parametros, new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+
+                                String mensaje= null;
+                                progreso.setVisibility(View.GONE);
+
+                                try {
+
+                                    JSONArray json = response.optJSONArray("usuario");
+                                    JSONObject jsonObject = null;
+                                    jsonObject = json.getJSONObject(0);
+
+                                    switch (jsonObject.optString("nombre")){
+                                        case "WS no retorna":               mensaje = "No se podido establecer conexion con el servidor";
+                                            break;
+                                        case "No Registra":                 mensaje = "No se ha podido completar el registro";
+                                            break;
+                                        case "Email ya existe":             mensaje = "Ya existe un usuario registrado con ese email.";
+                                            break;
+                                        case "Nombre de usuario ya existe": mensaje = "El nombre de usuario introducido ya esta en uso";
+                                            break;
+                                        default:                            mensaje = "Se ha registrado correctamente";
+                                            abrirLogin = new Intent(getApplicationContext(),LogInActivity.class);
+                                            startActivity(abrirLogin);
+                                    }
+
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
+                                nombre.setFocusable(true);
+                                nombre.setFocusableInTouchMode(true);
+                                email.setFocusable(true);
+                                email.setFocusableInTouchMode(true);
+                                contrasena.setFocusable(true);
+                                contrasena.setFocusableInTouchMode(true);
+                                repetircontrasena.setFocusable(true);
+                                repetircontrasena.setFocusableInTouchMode(true);
+
+
+                                Toast.makeText(getApplicationContext(),mensaje,Toast.LENGTH_SHORT).show();
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                progreso.setVisibility(View.GONE);
+
+                                nombre.setFocusable(true);
+                                nombre.setFocusableInTouchMode(true);
+                                email.setFocusable(true);
+                                email.setFocusableInTouchMode(true);
+                                contrasena.setFocusable(true);
+                                contrasena.setFocusableInTouchMode(true);
+                                repetircontrasena.setFocusable(true);
+                                repetircontrasena.setFocusableInTouchMode(true);
+
+                                Toast.makeText(getApplicationContext(),"Se ha producido un error.",Toast.LENGTH_SHORT).show();
+                                Log.i("Error", error.toString());
+                            }
+                        });
+
+                        RequestQueue request2 = Volley.newRequestQueue(getApplicationContext());
+                        request2.add(jsonObjectRequest);
+                    }
+                    else{
+                        Toast.makeText(getApplicationContext(),"No se ha podido completar el registro", Toast.LENGTH_SHORT).show();
+                    }
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(),"Error",Toast.LENGTH_SHORT).show();
+                flag = 0;
+            }
+        });
         request.add(jsonObjectRequest);
 
-
-    }
-
-    @Override
-    public void onResponse(JSONObject response) {
-        String mensaje= null;
-        progreso.setVisibility(View.GONE);
-
-        try {
-
-            JSONArray json = response.optJSONArray("usuario");
-            JSONObject jsonObject = null;
-            jsonObject = json.getJSONObject(0);
-
-            switch (jsonObject.optString("nombre")){
-                case "WS no retorna":               mensaje = "No se podido establecer conexion con el servidor";
-                                                    break;
-                case "No Registra":                 mensaje = "No se ha podido completar el registro";
-                                                    break;
-                case "Email ya existe":             mensaje = "Ya existe un usuario registrado con ese email.";
-                                                    break;
-                case "Nombre de usuario ya existe": mensaje = "El nombre de usuario introducido ya esta en uso";
-                                                    break;
-                default:                            mensaje = "Se ha registrado correctamente";
-                                                    abrirLogin = new Intent(getApplicationContext(),LogInActivity.class);
-                                                    startActivity(abrirLogin);
-            }
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        nombre.setFocusable(true);
-        nombre.setFocusableInTouchMode(true);
-        email.setFocusable(true);
-        email.setFocusableInTouchMode(true);
-        contrasena.setFocusable(true);
-        contrasena.setFocusableInTouchMode(true);
-        repetircontrasena.setFocusable(true);
-        repetircontrasena.setFocusableInTouchMode(true);
-
-
-        Toast.makeText(getApplicationContext(),mensaje,Toast.LENGTH_SHORT).show();
-
-
-
-    }
-
-    @Override
-    public void onErrorResponse(VolleyError error) {
-        progreso.setVisibility(View.GONE);
-
-        nombre.setFocusable(true);
-        nombre.setFocusableInTouchMode(true);
-        email.setFocusable(true);
-        email.setFocusableInTouchMode(true);
-        contrasena.setFocusable(true);
-        contrasena.setFocusableInTouchMode(true);
-        repetircontrasena.setFocusable(true);
-        repetircontrasena.setFocusableInTouchMode(true);
-
-        Toast.makeText(getApplicationContext(),"Se ha producido un error.",Toast.LENGTH_SHORT).show();
-        Log.i("Error", error.toString());
     }
 }

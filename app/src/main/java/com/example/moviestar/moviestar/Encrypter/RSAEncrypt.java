@@ -10,7 +10,6 @@ import java.security.PublicKey;
 import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
-
 import javax.crypto.Cipher;
 
 
@@ -25,8 +24,9 @@ public class RSAEncrypt {
 
         private String publicKey;
 
-        public RSAEncrypt() {
-            this.publicKey = this.getPublicKey();
+        public RSAEncrypt(String clave) {
+
+            this.publicKey = clave;
 
         }
 
@@ -82,13 +82,5 @@ public class RSAEncrypt {
 
         }
 
-
-        private String getPublicKey() {
-
-            // write a code to fetch it
-            // Base 64 encoded public key
-            //return "LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0NCk1JR2ZNQTBHQ1NxR1NJYjNEUUVCQVFVQUE0R05BRENCaVFLQmdRRE1PZGtaN28yMmJiSTAxZnY5QWtvMXFmTHd6MzRBYlA3ejgrcUMNCi9XZGNHdEFmdGk1QUFvZWUxOTV2NUd1QTZhak9JS3Y1cDkzdEdFNitWamdRdG03d0phS25kMno1UGpvZHIvc2R5bW9hNGdZT2dXcHQNCmVvamRybFZmeHZBbUxUN0JsWEExNGNuQUxDc3prYUtmTktSeEIrWDZlZGIyQkVaVnlKYThQcTBLYndJREFRQUINCi0tLS0tRU5EIFBVQkxJQyBLRVktLS0tLQ==";
-            return "LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0NCk1JR2ZNQTBHQ1NxR1NJYjNEUUVCQVFVQUE0R05BRENCaVFLQmdRQzlvZFBRd0hNbXpWSnNXMGRjc0lkWXZBOTINClBvVmErZTYycStTeHoxdzJxLzl3bUtXbjNtTUVKMEcyTFY0MEx4MGhmMVpJZjVLYnl1WDBoTnQvUmhidHhGZ1oNCnVGMTE3bStyWlBxc3hBd3FSMVNyZUtLWHM2Nm5CTTZ0U3NLcUphNVQ2RWJKdGNRLzMwVkVVVWM5LzFFcWd3TUINCmhaZUpPRWt2aVpmTUVWUTgyd0lEQVFBQg0KLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0t";
-        }
 }
 
