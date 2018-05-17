@@ -33,7 +33,7 @@ public class SingUpActivity extends AppCompatActivity {
     Button registrarse;
     ProgressBar progreso;
     RequestQueue request;
-    JsonObjectRequest jsonObjectRequest;
+    JsonObjectRequest jsonObjectRequest, jsonObjectRequest2;
     Intent abrirLogin;
     String Tnombre, Temail,Tcontrasena,clave,id;
     String EncryptedNombre, EncryptedEmail,EncryptedContrasena;
@@ -106,158 +106,190 @@ public class SingUpActivity extends AppCompatActivity {
         repetircontrasena.setFocusable(false);
 
 
-        String url = getString(R.string.url);
+        if(flag == 0) {
+            String url = getString(R.string.url);
 
-        url = url + "/Claves.php";
+            url = url + "/Claves.php";
 
 
-        jsonObjectRequest = null;
-        jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,url, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    JSONArray json = response.getJSONArray("PK");
+            jsonObjectRequest = new JsonObjectRequest(url, null, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
 
-                    JSONObject json2 = json.getJSONObject(0);
+                        JSONArray json = response.getJSONArray("PK");
 
-                    id = String.valueOf(json2.optInt("id"));
+                        JSONObject json2 = json.getJSONObject(0);
 
-                    if (!id.equals("No se ha podido generar la clave")) {
-                        clave = json2.optString("clave");
-                        flag = 1;
-                    } else {
-                        flag = 0;
+                        id = String.valueOf(json2.optInt("id"));
+
+                        if (!id.equals("No se ha podido generar la clave")) {
+                            clave = json2.optString("clave");
+                            prueba();
+                        } else {
+                            nombre.setFocusable(true);
+                            nombre.setFocusableInTouchMode(true);
+                            email.setFocusable(true);
+                            email.setFocusableInTouchMode(true);
+                            contrasena.setFocusable(true);
+                            contrasena.setFocusableInTouchMode(true);
+                            repetircontrasena.setFocusable(true);
+                            repetircontrasena.setFocusableInTouchMode(true);
+
+                            Toast.makeText(getApplicationContext(), "No se ha podido completar e registro 1", Toast.LENGTH_SHORT).show();
+                        }
+
+                    } catch (JSONException e) {
+
+                        nombre.setFocusable(true);
+                        nombre.setFocusableInTouchMode(true);
+                        email.setFocusable(true);
+                        email.setFocusableInTouchMode(true);
+                        contrasena.setFocusable(true);
+                        contrasena.setFocusableInTouchMode(true);
+                        repetircontrasena.setFocusable(true);
+                        repetircontrasena.setFocusableInTouchMode(true);
+                        e.printStackTrace();
                     }
-
-
-                    if(flag == 1) {
-                        RSAEncrypt rsa = new RSAEncrypt(clave);
-                        Tnombre = nombre.getText().toString();
-
-                        try {
-                            EncryptedNombre = rsa.encrypt(Tnombre);
-                            EncryptedNombre = EncryptedNombre.replace("\n", "").replace("+", "@");
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-
-
-                        Temail = email.getText().toString();
-
-                        try {
-                            EncryptedEmail = rsa.encrypt(Temail);
-                            EncryptedEmail = EncryptedEmail.replace("\n", "").replace("+", "@");
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-
-
-                        Tcontrasena = contrasena.getText().toString();
-
-                        try {
-                            EncryptedContrasena = rsa.encrypt(Tcontrasena);
-                            EncryptedContrasena = EncryptedContrasena.replace("\n", "").replace("+", "@");
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-
-                        String url = getString(R.string.url);
-                        url = url + "/RegistrarUsuario.php";
-
-
-                        JSONObject parametros = new JSONObject();
-                        try {
-                            parametros.put("nombre", EncryptedNombre);
-                            parametros.put("email", EncryptedEmail);
-                            parametros.put("contrasena", EncryptedContrasena);
-                            parametros.put("id", id);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                        jsonObjectRequest = null;
-                        jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, parametros, new Response.Listener<JSONObject>() {
-                            @Override
-                            public void onResponse(JSONObject response) {
-
-                                String mensaje= null;
-                                progreso.setVisibility(View.GONE);
-
-                                try {
-
-                                    JSONArray json = response.optJSONArray("usuario");
-                                    JSONObject jsonObject = null;
-                                    jsonObject = json.getJSONObject(0);
-
-                                    switch (jsonObject.optString("nombre")){
-                                        case "WS no retorna":               mensaje = "No se podido establecer conexion con el servidor";
-                                            break;
-                                        case "No Registra":                 mensaje = "No se ha podido completar el registro";
-                                            break;
-                                        case "Email ya existe":             mensaje = "Ya existe un usuario registrado con ese email.";
-                                            break;
-                                        case "Nombre de usuario ya existe": mensaje = "El nombre de usuario introducido ya esta en uso";
-                                            break;
-                                        default:                            mensaje = "Se ha registrado correctamente";
-                                            abrirLogin = new Intent(getApplicationContext(),LogInActivity.class);
-                                            startActivity(abrirLogin);
-                                    }
-
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-
-                                nombre.setFocusable(true);
-                                nombre.setFocusableInTouchMode(true);
-                                email.setFocusable(true);
-                                email.setFocusableInTouchMode(true);
-                                contrasena.setFocusable(true);
-                                contrasena.setFocusableInTouchMode(true);
-                                repetircontrasena.setFocusable(true);
-                                repetircontrasena.setFocusableInTouchMode(true);
-
-
-                                Toast.makeText(getApplicationContext(),mensaje,Toast.LENGTH_SHORT).show();
-                            }
-                        }, new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                progreso.setVisibility(View.GONE);
-
-                                nombre.setFocusable(true);
-                                nombre.setFocusableInTouchMode(true);
-                                email.setFocusable(true);
-                                email.setFocusableInTouchMode(true);
-                                contrasena.setFocusable(true);
-                                contrasena.setFocusableInTouchMode(true);
-                                repetircontrasena.setFocusable(true);
-                                repetircontrasena.setFocusableInTouchMode(true);
-
-                                Toast.makeText(getApplicationContext(),"Se ha producido un error.",Toast.LENGTH_SHORT).show();
-                                Log.i("Error", error.toString());
-                            }
-                        });
-
-                        RequestQueue request2 = Volley.newRequestQueue(getApplicationContext());
-                        request2.add(jsonObjectRequest);
-                    }
-                    else{
-                        Toast.makeText(getApplicationContext(),"No se ha podido completar el registro", Toast.LENGTH_SHORT).show();
-                    }
-
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
                 }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(),"Error",Toast.LENGTH_SHORT).show();
-                flag = 0;
-            }
-        });
-        request.add(jsonObjectRequest);
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    nombre.setFocusable(true);
+                    nombre.setFocusableInTouchMode(true);
+                    email.setFocusable(true);
+                    email.setFocusableInTouchMode(true);
+                    contrasena.setFocusable(true);
+                    contrasena.setFocusableInTouchMode(true);
+                    repetircontrasena.setFocusable(true);
+                    repetircontrasena.setFocusableInTouchMode(true);
+                    Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+                }
+            });
+            request.add(jsonObjectRequest);
+        }
+        else{
+            prueba();
+        }
+    }
 
+
+    private void prueba(){
+
+            RSAEncrypt rsa = new RSAEncrypt(clave);
+            Tnombre = nombre.getText().toString();
+
+            try {
+                EncryptedNombre = rsa.encrypt(Tnombre);
+                EncryptedNombre = EncryptedNombre.replace("\n", "").replace("+", "@");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+            Temail = email.getText().toString();
+
+            try {
+                EncryptedEmail = rsa.encrypt(Temail);
+                EncryptedEmail = EncryptedEmail.replace("\n", "").replace("+", "@");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+            Tcontrasena = contrasena.getText().toString();
+
+            try {
+                EncryptedContrasena = rsa.encrypt(Tcontrasena);
+                EncryptedContrasena = EncryptedContrasena.replace("\n", "").replace("+", "@");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+            String url = getString(R.string.url);
+            url = url + "/RegistrarUsuario.php";
+
+
+            JSONObject parametros = new JSONObject();
+            try {
+                parametros.put("nombre", EncryptedNombre);
+                parametros.put("email", EncryptedEmail);
+                parametros.put("contrasena", EncryptedContrasena);
+                parametros.put("id", id);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            jsonObjectRequest2 = new JsonObjectRequest(Request.Method.POST, url, parametros, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+
+                    String mensaje= null;
+                    progreso.setVisibility(View.GONE);
+
+                    try {
+
+                        JSONArray json = response.optJSONArray("usuario");
+                        JSONObject jsonObject = null;
+                        jsonObject = json.getJSONObject(0);
+
+                        switch (jsonObject.optString("nombre")){
+                            case "WS no retorna":                   mensaje = "No se podido establecer conexion con el servidor";
+                                                                    flag = 1;
+                                                                    break;
+                            case "No Registra":                     mensaje = "No se ha podido completar el registro";
+                                                                    flag = 1;
+                                                                    break;
+                            case "Email ya existe":                 mensaje = "Ya existe un usuario registrado con ese email.";
+                                                                    flag = 1;
+                                                                    break;
+                            case "Nombre de usuario ya existe":     mensaje = "El nombre de usuario introducido ya esta en uso";
+                                                                    flag = 1;
+                                                                    break;
+                            case "No se puedo completar el registro": mensaje = "No se ha podido completar el registro";
+                                                                    flag = 1;
+                                                                    break;
+                            default:                                mensaje = "Se ha registrado correctamente";
+                                                                    abrirLogin = new Intent(getApplicationContext(),LogInActivity.class);
+                                                                    startActivity(abrirLogin);
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    nombre.setFocusable(true);
+                    nombre.setFocusableInTouchMode(true);
+                    email.setFocusable(true);
+                    email.setFocusableInTouchMode(true);
+                    contrasena.setFocusable(true);
+                    contrasena.setFocusableInTouchMode(true);
+                    repetircontrasena.setFocusable(true);
+                    repetircontrasena.setFocusableInTouchMode(true);
+
+
+                    Toast.makeText(getApplicationContext(),mensaje,Toast.LENGTH_SHORT).show();
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    progreso.setVisibility(View.GONE);
+
+                    nombre.setFocusable(true);
+                    nombre.setFocusableInTouchMode(true);
+                    email.setFocusable(true);
+                    email.setFocusableInTouchMode(true);
+                    contrasena.setFocusable(true);
+                    contrasena.setFocusableInTouchMode(true);
+                    repetircontrasena.setFocusable(true);
+                    repetircontrasena.setFocusableInTouchMode(true);
+
+                    Toast.makeText(getApplicationContext(),"Se ha producido un error.",Toast.LENGTH_SHORT).show();
+                    Log.i("Error", error.toString());
+                }
+            });
+
+            request.add(jsonObjectRequest2);
     }
 }
