@@ -71,14 +71,6 @@ public class FTrailerPeli extends Fragment implements Response.Listener<JSONObje
 
         recyclerViewTrailer = vista.findViewById(R.id.recyclerViewTrailers);
 
-        fbFav = getActivity().findViewById(R.id.fbFav);
-        fbTime = getActivity().findViewById(R.id.fbTime);
-        fbEye = getActivity().findViewById(R.id.fbEye);
-
-        fbFav.setVisibility(View.GONE);
-        fbEye.setVisibility(View.GONE);
-        fbTime.setVisibility(View.GONE);
-
 
         request = Volley.newRequestQueue(getContext());
 

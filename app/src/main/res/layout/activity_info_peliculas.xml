@@ -95,43 +95,6 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/tabs" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fbEye"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="15dp"
-        android:layout_marginEnd="40dp"
-        android:clickable="true"
-        android:tag="0"
-        app:srcCompat="@drawable/eye" />
 
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fbTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="15dp"
-        android:layout_marginEnd="178dp"
-        android:layout_marginStart="178dp"
-        android:clickable="true"
-        android:tag="0"
-        app:srcCompat="@drawable/clock" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fbFav"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="15dp"
-        android:layout_marginStart="40dp"
-        android:clickable="true"
-        android:tag="0"
-        app:srcCompat="@drawable/favorite" />
 
 </RelativeLayout>

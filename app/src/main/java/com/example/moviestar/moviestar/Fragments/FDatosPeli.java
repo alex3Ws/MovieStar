@@ -4,6 +4,7 @@ import android.content.Context;
 import android.icu.text.UnicodeSetSpanner;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -35,6 +36,7 @@ public class FDatosPeli extends Fragment implements Response.Listener<JSONObject
     JsonObjectRequest jsonObjectRequest;
     TextView titulo_original,compañias,generos,pais,actores,sinopsis;
     JSONObject jsonObject;
+    FloatingActionButton fbFav,fbTime,fbEye;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,7 +46,56 @@ public class FDatosPeli extends Fragment implements Response.Listener<JSONObject
         vista = inflater.inflate(R.layout.fragment_datos_peli, container, false);
 
 
+        fbFav = vista.findViewById(R.id.fbFavorite);
+        fbFav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
+
+                if(fbFav.getTag().equals("0")) {
+                    fbFav.setImageResource(R.drawable.star);
+                    fbFav.setTag("1");
+                }
+                else{
+                    fbFav.setImageResource(R.drawable.favorite);
+                    fbFav.setTag("0");
+                }
+            }
+        });
+
+        fbTime = vista.findViewById(R.id.fbTimer);
+        fbTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(fbTime.getTag().equals("0")) {
+                    fbTime.setImageResource(R.drawable.checked);
+                    fbTime.setTag("1");
+                }
+                else{
+                    fbTime.setImageResource(R.drawable.clock);
+                    fbTime.setTag("0");
+                }
+
+            }
+        });
+
+
+        fbEye = vista.findViewById(R.id.fbEyes);
+        fbEye.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(fbEye.getTag().equals("0")) {
+                    fbEye.setImageResource(R.drawable.eye_blocked);
+                    fbEye.setTag("1");
+                }
+                else{
+                    fbEye.setImageResource(R.drawable.eye);
+                    fbEye.setTag("0");
+                }
+            }
+
+        });
 
 
         try {
@@ -230,6 +281,5 @@ public class FDatosPeli extends Fragment implements Response.Listener<JSONObject
     public void onErrorResponse(VolleyError error) {
         Toast.makeText(getContext(),"Algo ha ido mal", Toast.LENGTH_SHORT).show();
     }
-
 
 }

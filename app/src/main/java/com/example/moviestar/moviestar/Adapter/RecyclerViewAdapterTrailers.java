@@ -48,7 +48,7 @@ public class RecyclerViewAdapterTrailers extends RecyclerView.Adapter<RecyclerVi
 
             holder.texto.setText(texto);
 
-            String url = "https://img.youtube.com/vi/"+key+"/mqdefault.jpg";
+            String url = "https://img.youtube.com/vi/"+key+"/maxresdefault.jpg";
 
             Picasso.get().load(url).placeholder(context.getResources().getDrawable(R.drawable.cinefondo)).error(context.getResources().getDrawable(R.drawable.cinefondo)).resize(1050,600).into(holder.imagen);
 

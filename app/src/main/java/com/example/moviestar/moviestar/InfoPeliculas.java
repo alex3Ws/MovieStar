@@ -51,9 +51,8 @@ public class InfoPeliculas extends AppCompatActivity {
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
 
-    FloatingActionButton fbFav,fbTime,fbEye;
+
     String id;
-    Boolean flag, flag2;
     JSONObject jsonObject;
     String urlBaseImagenes = "http://image.tmdb.org/t/p/w500";
     TextView titulo;
@@ -82,59 +81,8 @@ public class InfoPeliculas extends AppCompatActivity {
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
-        fbFav = findViewById(R.id.fbFav);
-        fbFav.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
 
 
-                if(fbFav.getTag().equals("0")) {
-                    fbFav.setImageResource(R.drawable.star);
-                    fbFav.setTag("1");
-                }
-                else{
-                    fbFav.setImageResource(R.drawable.favorite);
-                    fbFav.setTag("0");
-                }
-            }
-        });
-
-        fbTime = findViewById(R.id.fbTime);
-        fbTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if(fbTime.getTag().equals("0")) {
-                    fbTime.setImageResource(R.drawable.checked);
-                    fbTime.setTag("1");
-                }
-                else{
-                    fbTime.setImageResource(R.drawable.clock);
-                    fbTime.setTag("0");
-                }
-
-            }
-        });
-
-
-        fbEye = findViewById(R.id.fbEye);
-        fbEye.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(fbEye.getTag().equals("0")) {
-                    fbEye.setImageResource(R.drawable.eye_blocked);
-                    fbEye.setTag("1");
-                }
-                else{
-                    fbEye.setImageResource(R.drawable.eye);
-                    fbEye.setTag("0");
-                }
-            }
-
-        });
-
-        flag = false;
-        flag2 = false;
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarInfo);
 
@@ -177,13 +125,7 @@ public class InfoPeliculas extends AppCompatActivity {
 
         titulo.setText(jsonObject.optString("title"));
 
-        Handler handler = new Handler();
 
-        handler.postDelayed(new Runnable() {
-            public void run() {
-                flag = true;
-            }
-        }, 500);
 
 
     }
