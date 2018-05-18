@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/viewPager"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     tools:context=".Fragments.FDatosPeli">
@@ -12,7 +13,7 @@
 
         <RelativeLayout
         android:id="@+id/rl1"
-            android:layout_marginTop="15dp"
+        android:layout_marginTop="15dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
             <TextView
@@ -133,7 +134,7 @@
             android:id="@+id/rl4"
             android:layout_below="@+id/rl3"
             android:layout_marginTop="25dp"
-            android:layout_marginBottom="25dp"
+            android:layout_marginBottom="85dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TextView
@@ -157,6 +158,6 @@
                 android:text="Vengadores: Infinity War seguirá la lucha de los superhéroes de Marvel contra el mayor villano al que se han enfrentado nunca: Thanos. Su único objetivo será detener a este poderoso antagonista e impedir que se haga con el control de la galaxia. De nuevo veremos al grupo formado por Iron Man, Capitán América, Viuda negra, Ant-Man, Ojo de Halcón, Thor y Hulk, entre otros. En su nueva e impactante aventura, las Gemas del Infinito estarán en juego, unos querrán protegerlas y otros controlarlas, ¿quién ganará?" />
         </RelativeLayout>
 
-
     </RelativeLayout>
+
 </ScrollView>

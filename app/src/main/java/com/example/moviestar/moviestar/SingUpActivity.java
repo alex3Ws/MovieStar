@@ -16,6 +16,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.moviestar.moviestar.Encrypter.RSAEncrypt;
 
@@ -251,6 +252,7 @@ public class SingUpActivity extends AppCompatActivity {
                                                                     flag = 1;
                                                                     break;
                             default:                                mensaje = "Se ha registrado correctamente";
+                                                                    flag = 0;
                                                                     abrirLogin = new Intent(getApplicationContext(),LogInActivity.class);
                                                                     startActivity(abrirLogin);
                         }
@@ -291,5 +293,60 @@ public class SingUpActivity extends AppCompatActivity {
             });
 
             request.add(jsonObjectRequest2);
+    }
+
+    @Override
+    public void onBackPressed() {
+
+
+        if(flag == 1){
+
+            String url = getString(R.string.url);
+            url = url + "/Borrar.php?id="+id;
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, url,new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    flag = 0;
+                }
+
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                }
+
+            });
+
+            request.add(stringRequest);
+        }
+
+        super.onBackPressed();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if(flag == 1){
+
+            String url = getString(R.string.url);
+            url = url + "/Borrar.php?id="+id;
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, url,new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    flag = 0;
+                }
+
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                }
+
+            });
+
+            request.add(stringRequest);
+        }
+
     }
 }

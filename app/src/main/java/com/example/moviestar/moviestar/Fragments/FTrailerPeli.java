@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,7 +13,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewDebug;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -46,13 +49,14 @@ import java.util.ArrayList;
 public class FTrailerPeli extends Fragment implements Response.Listener<JSONObject>, Response.ErrorListener{
 
     View vista;
-    RecyclerView recyclerView;
+    RecyclerView recyclerViewTrailer;
     ArrayList<String> trailers;
     RecyclerViewAdapterTrailers adapter;
     RequestQueue request;
     JsonObjectRequest jsonObjectRequest;
     LinearLayoutManager manager;
     String id;
+    FloatingActionButton fbFav,fbTime,fbEye;
 
     public static final String API_KEY = "AIzaSyBfEKxHbR4FZSZ96HZDzf7pVP1tABkmDI0";
     public static final String VIDEO_ID = "ImE-C23eba8";
@@ -65,13 +69,22 @@ public class FTrailerPeli extends Fragment implements Response.Listener<JSONObje
 
         vista =  inflater.inflate(R.layout.fragment_trailer_peli, container, false);
 
-        recyclerView = vista.findViewById(R.id.recyclerViewTrailers);
+        recyclerViewTrailer = vista.findViewById(R.id.recyclerViewTrailers);
+
+        fbFav = getActivity().findViewById(R.id.fbFav);
+        fbTime = getActivity().findViewById(R.id.fbTime);
+        fbEye = getActivity().findViewById(R.id.fbEye);
+
+        fbFav.setVisibility(View.GONE);
+        fbEye.setVisibility(View.GONE);
+        fbTime.setVisibility(View.GONE);
+
 
         request = Volley.newRequestQueue(getContext());
 
         manager = new LinearLayoutManager(getContext());
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(manager);
+        recyclerViewTrailer.setHasFixedSize(true);
+        recyclerViewTrailer.setLayoutManager(manager);
 
 
         trailers = new ArrayList<>();
@@ -102,6 +115,7 @@ public class FTrailerPeli extends Fragment implements Response.Listener<JSONObje
 
         jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,url,null,this,this);
         request.add(jsonObjectRequest);
+
     }
 
 
@@ -149,7 +163,7 @@ public class FTrailerPeli extends Fragment implements Response.Listener<JSONObje
         }
 
         adapter = new RecyclerViewAdapterTrailers(getContext(), trailers);
-        recyclerView.setAdapter(adapter);
+        recyclerViewTrailer.setAdapter(adapter);
 
     }
 

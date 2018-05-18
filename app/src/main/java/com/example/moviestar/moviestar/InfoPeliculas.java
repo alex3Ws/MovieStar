@@ -2,6 +2,7 @@ package com.example.moviestar.moviestar;
 
 import android.graphics.Color;
 import android.os.Build;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -50,8 +51,9 @@ public class InfoPeliculas extends AppCompatActivity {
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
 
-
+    FloatingActionButton fbFav,fbTime,fbEye;
     String id;
+    Boolean flag, flag2;
     JSONObject jsonObject;
     String urlBaseImagenes = "http://image.tmdb.org/t/p/w500";
     TextView titulo;
@@ -80,14 +82,59 @@ public class InfoPeliculas extends AppCompatActivity {
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
-        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        fbFav = findViewById(R.id.fbFav);
+        fbFav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+
+
+                if(fbFav.getTag().equals("0")) {
+                    fbFav.setImageResource(R.drawable.star);
+                    fbFav.setTag("1");
+                }
+                else{
+                    fbFav.setImageResource(R.drawable.favorite);
+                    fbFav.setTag("0");
+                }
             }
-        });*/
+        });
+
+        fbTime = findViewById(R.id.fbTime);
+        fbTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(fbTime.getTag().equals("0")) {
+                    fbTime.setImageResource(R.drawable.checked);
+                    fbTime.setTag("1");
+                }
+                else{
+                    fbTime.setImageResource(R.drawable.clock);
+                    fbTime.setTag("0");
+                }
+
+            }
+        });
+
+
+        fbEye = findViewById(R.id.fbEye);
+        fbEye.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(fbEye.getTag().equals("0")) {
+                    fbEye.setImageResource(R.drawable.eye_blocked);
+                    fbEye.setTag("1");
+                }
+                else{
+                    fbEye.setImageResource(R.drawable.eye);
+                    fbEye.setTag("0");
+                }
+            }
+
+        });
+
+        flag = false;
+        flag2 = false;
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarInfo);
 
@@ -129,6 +176,14 @@ public class InfoPeliculas extends AppCompatActivity {
         Picasso.get().load(urlBaseImagenes+jsonObject.optString("poster_path")).placeholder(getApplicationContext().getResources().getDrawable(R.drawable.cinefondo)).error(getApplicationContext().getResources().getDrawable(R.drawable.cinefondo)).resize(520,680).into(imagen);
 
         titulo.setText(jsonObject.optString("title"));
+
+        Handler handler = new Handler();
+
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                flag = true;
+            }
+        }, 500);
 
 
     }
@@ -213,6 +268,7 @@ public class InfoPeliculas extends AppCompatActivity {
                             info.putString("jsonObject", jsonObject.toString());
                             fDatosPeli.setArguments(info);
 
+
                             return fDatosPeli;
 
 
@@ -227,6 +283,8 @@ public class InfoPeliculas extends AppCompatActivity {
 
                     case 2:
                             FCriticasPeli fCriticasPeli = new FCriticasPeli();
+
+
                             return fCriticasPeli;
 
                 }
@@ -241,21 +299,6 @@ public class InfoPeliculas extends AppCompatActivity {
             return 3;
         }
 
-        @Nullable
-        @Override
-        public CharSequence getPageTitle(int position) {
 
-            switch (position){
-
-                case 0:  return "Datos";
-
-                case 1:  return "Trailer";
-
-                case 2:  return  "Criticas";
-
-            }
-
-            return null;
-        }
     }
 }
