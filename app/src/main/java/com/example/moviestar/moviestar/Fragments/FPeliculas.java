@@ -62,6 +62,7 @@ public class FPeliculas extends Fragment implements Response.Listener<JSONObject
         listaPeliculas = new ArrayList<>();
         listaGeneros = new ArrayList<>();
 
+
         request =  Volley.newRequestQueue(getContext());
 
         recycledPeliculas = vista.findViewById(R.id.recycledView);

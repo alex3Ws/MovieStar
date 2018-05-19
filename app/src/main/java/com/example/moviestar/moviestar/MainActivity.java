@@ -22,6 +22,9 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     TextView prueba;
+    public String user_name;
+    public int user_id;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +50,9 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        user_name = getIntent().getStringExtra("Usuario");
+        user_id = getIntent().getIntExtra("id",0);
 
 
         android.support.v4.app.FragmentManager fragmentManager1 = getSupportFragmentManager();

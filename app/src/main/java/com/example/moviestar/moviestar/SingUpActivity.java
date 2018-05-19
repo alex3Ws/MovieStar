@@ -126,7 +126,7 @@ public class SingUpActivity extends AppCompatActivity {
 
                         if (!id.equals("No se ha podido generar la clave")) {
                             clave = json2.optString("clave");
-                            prueba();
+                            registrar();
                         } else {
                             nombre.setFocusable(true);
                             nombre.setFocusableInTouchMode(true);
@@ -170,12 +170,12 @@ public class SingUpActivity extends AppCompatActivity {
             request.add(jsonObjectRequest);
         }
         else{
-            prueba();
+            registrar();
         }
     }
 
 
-    private void prueba(){
+    private void registrar(){
 
             RSAEncrypt rsa = new RSAEncrypt(clave);
             Tnombre = nombre.getText().toString();

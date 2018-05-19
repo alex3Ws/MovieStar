@@ -37,6 +37,9 @@ public class FDatosPeli extends Fragment implements Response.Listener<JSONObject
     TextView titulo_original,compañias,generos,pais,actores,sinopsis;
     JSONObject jsonObject;
     FloatingActionButton fbFav,fbTime,fbEye;
+    JSONObject parametros;
+    int id_user,id_pelicula;
+    String operacion,tipo;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,19 +49,64 @@ public class FDatosPeli extends Fragment implements Response.Listener<JSONObject
         vista = inflater.inflate(R.layout.fragment_datos_peli, container, false);
 
 
+        try {
+            String jsonString = getArguments().getString("jsonObject");
+            jsonObject = new JSONObject(jsonString);
+
+        } catch (JSONException e) {
+
+            e.printStackTrace();
+        }
+
+        id_pelicula = jsonObject.optInt("id");
+
+        id_user= 0;
+        //----------------------------------------------------------------------------------
+
         fbFav = vista.findViewById(R.id.fbFavorite);
         fbFav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
+                tipo = "favorita";
 
                 if(fbFav.getTag().equals("0")) {
                     fbFav.setImageResource(R.drawable.star);
+                    operacion = "insert";
                     fbFav.setTag("1");
+
+                    parametros = null;
+                    parametros = new JSONObject();
+                    try {
+                        parametros.put("id_user", id_user);
+                        parametros.put("operacion", operacion);
+                        parametros.put("id_pelicula", id_pelicula);
+                        parametros.put("tipo", tipo);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    peliculas_user(parametros);
+
+
                 }
                 else{
                     fbFav.setImageResource(R.drawable.favorite);
+                    operacion = "delete";
                     fbFav.setTag("0");
+
+                    parametros = null;
+                    parametros = new JSONObject();
+                    try {
+                        parametros.put("id_user", id_user);
+                        parametros.put("operacion", operacion);
+                        parametros.put("id_pelicula", id_pelicula);
+                        parametros.put("tipo", tipo);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    peliculas_user(parametros);
                 }
             }
         });
@@ -68,12 +116,16 @@ public class FDatosPeli extends Fragment implements Response.Listener<JSONObject
             @Override
             public void onClick(View view) {
 
+                tipo = "pendiente";
+
                 if(fbTime.getTag().equals("0")) {
                     fbTime.setImageResource(R.drawable.checked);
+                    operacion = "insert";
                     fbTime.setTag("1");
                 }
                 else{
                     fbTime.setImageResource(R.drawable.clock);
+                    operacion = "delete";
                     fbTime.setTag("0");
                 }
 
@@ -85,12 +137,17 @@ public class FDatosPeli extends Fragment implements Response.Listener<JSONObject
         fbEye.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                tipo = "vista";
+
                 if(fbEye.getTag().equals("0")) {
                     fbEye.setImageResource(R.drawable.eye_blocked);
+                    operacion = "insert";
                     fbEye.setTag("1");
                 }
                 else{
                     fbEye.setImageResource(R.drawable.eye);
+                    operacion = "delete";
                     fbEye.setTag("0");
                 }
             }
@@ -98,14 +155,6 @@ public class FDatosPeli extends Fragment implements Response.Listener<JSONObject
         });
 
 
-        try {
-              String jsonString = getArguments().getString("jsonObject");
-              jsonObject = new JSONObject(jsonString);
-
-        } catch (JSONException e) {
-
-            e.printStackTrace();
-        }
 
         request = Volley.newRequestQueue(getContext());
 
@@ -280,6 +329,29 @@ public class FDatosPeli extends Fragment implements Response.Listener<JSONObject
     @Override
     public void onErrorResponse(VolleyError error) {
         Toast.makeText(getContext(),"Algo ha ido mal", Toast.LENGTH_SHORT).show();
+    }
+
+
+    public void peliculas_user(JSONObject parametros){
+
+        String url = getString(R.string.url);
+        url = url + "/Peliculas_user.php";
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, parametros, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+                Toast.makeText(getContext(),response.optString("respuesta"),Toast.LENGTH_SHORT).show();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getContext(),"Se ha producido un error",Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        request.add(jsonObjectRequest);
+
     }
 
 }
