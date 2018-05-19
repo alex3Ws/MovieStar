@@ -57,6 +57,7 @@ public class InfoPeliculas extends AppCompatActivity {
     String urlBaseImagenes = "http://image.tmdb.org/t/p/w500";
     TextView titulo;
     ImageView fondo, imagen;
+    int user_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +105,7 @@ public class InfoPeliculas extends AppCompatActivity {
         imagen = findViewById(R.id.imcaratula);
 
         String json = getIntent().getStringExtra("json");
+        user_id = getIntent().getIntExtra("user_id",0);
 
         try {
             jsonObject = new JSONObject(json);
@@ -208,6 +210,7 @@ public class InfoPeliculas extends AppCompatActivity {
                             FDatosPeli fDatosPeli = new FDatosPeli();
 
                             info.putString("jsonObject", jsonObject.toString());
+                            info.putInt("user_id",user_id);
                             fDatosPeli.setArguments(info);
 
 

@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity
     TextView prueba;
     public String user_name;
     public int user_id;
+    Bundle info;
 
 
     @Override
@@ -54,10 +55,15 @@ public class MainActivity extends AppCompatActivity
         user_name = getIntent().getStringExtra("Usuario");
         user_id = getIntent().getIntExtra("id",0);
 
+        info = null;
+        info = new Bundle();
+        info.putInt("id",user_id);
+
+        FPeliculas fPeliculas = new FPeliculas();
+        fPeliculas.setArguments(info);
 
         android.support.v4.app.FragmentManager fragmentManager1 = getSupportFragmentManager();
-
-        fragmentManager1.beginTransaction().replace(R.id.contenedor, new FPeliculas()).commit();
+        fragmentManager1.beginTransaction().replace(R.id.contenedor, fPeliculas).commit();
     }
 
     @Override
@@ -101,7 +107,15 @@ public class MainActivity extends AppCompatActivity
         android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
 
         if (id == R.id.nav_camera) {
-            fragmentManager.beginTransaction().replace(R.id.contenedor, new FPeliculas()).commit();
+
+            info = null;
+            info = new Bundle();
+            info.putInt("id",user_id);
+
+            FPeliculas fPeliculas = new FPeliculas();
+            fPeliculas.setArguments(info);
+
+            fragmentManager.beginTransaction().replace(R.id.contenedor, fPeliculas).commit();
         } else if (id == R.id.nav_gallery) {
 
             fragmentManager.beginTransaction().replace(R.id.contenedor, new FAreaPersonal()).commit();

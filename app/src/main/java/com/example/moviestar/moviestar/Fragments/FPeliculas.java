@@ -50,6 +50,7 @@ public class FPeliculas extends Fragment implements Response.Listener<JSONObject
     int currentItems, totalItems,scrollOutItems;
     GridLayoutManager manager;
     ProgressBar progressBar;
+    int user_id;
 
 
 
@@ -63,6 +64,8 @@ public class FPeliculas extends Fragment implements Response.Listener<JSONObject
         listaGeneros = new ArrayList<>();
 
 
+        user_id = getArguments().getInt("id");
+
         request =  Volley.newRequestQueue(getContext());
 
         recycledPeliculas = vista.findViewById(R.id.recycledView);
@@ -71,7 +74,7 @@ public class FPeliculas extends Fragment implements Response.Listener<JSONObject
         recycledPeliculas.setHasFixedSize(true);
         recycledPeliculas.setLayoutManager(manager);
 
-        adapter = new RecyclerViewAdapter(getContext(), listaPeliculas);
+        adapter = new RecyclerViewAdapter(getContext(), listaPeliculas, user_id);
         recycledPeliculas.setAdapter(adapter);
 
 

@@ -35,10 +35,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     JSONObject jsonObject;
     Intent intent;
     String id;
+    int user_id;
 
-    public RecyclerViewAdapter(Context context,ArrayList<Pelicula> peliculas){
+    public RecyclerViewAdapter(Context context,ArrayList<Pelicula> peliculas,int  user_id){
         this.context = context;
         this.peliculas = peliculas;
+        this.user_id = user_id;
     }
 
     @NonNull
@@ -118,6 +120,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
             intent.putExtra("json",jsonObject.toString());
             intent.putExtra("id",id);
+            intent.putExtra("user_id",user_id);
 
             context.startActivity(intent);
 

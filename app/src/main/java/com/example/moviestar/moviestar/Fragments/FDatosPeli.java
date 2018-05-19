@@ -38,7 +38,7 @@ public class FDatosPeli extends Fragment implements Response.Listener<JSONObject
     JSONObject jsonObject;
     FloatingActionButton fbFav,fbTime,fbEye;
     JSONObject parametros;
-    int id_user,id_pelicula;
+    int user_id,id_pelicula;
     String operacion,tipo;
 
     @Override
@@ -47,7 +47,6 @@ public class FDatosPeli extends Fragment implements Response.Listener<JSONObject
         // Inflate the layout for this fragment
 
         vista = inflater.inflate(R.layout.fragment_datos_peli, container, false);
-
 
         try {
             String jsonString = getArguments().getString("jsonObject");
@@ -59,9 +58,7 @@ public class FDatosPeli extends Fragment implements Response.Listener<JSONObject
         }
 
         id_pelicula = jsonObject.optInt("id");
-
-        id_user= 0;
-        //----------------------------------------------------------------------------------
+        user_id = getArguments().getInt("user_id");
 
         fbFav = vista.findViewById(R.id.fbFavorite);
         fbFav.setOnClickListener(new View.OnClickListener() {
@@ -78,7 +75,7 @@ public class FDatosPeli extends Fragment implements Response.Listener<JSONObject
                     parametros = null;
                     parametros = new JSONObject();
                     try {
-                        parametros.put("id_user", id_user);
+                        parametros.put("id_user", user_id);
                         parametros.put("operacion", operacion);
                         parametros.put("id_pelicula", id_pelicula);
                         parametros.put("tipo", tipo);
@@ -86,7 +83,7 @@ public class FDatosPeli extends Fragment implements Response.Listener<JSONObject
                         e.printStackTrace();
                     }
 
-                    peliculas_user(parametros);
+                    peliculas_user(parametros,tipo, false);
 
 
                 }
@@ -98,7 +95,7 @@ public class FDatosPeli extends Fragment implements Response.Listener<JSONObject
                     parametros = null;
                     parametros = new JSONObject();
                     try {
-                        parametros.put("id_user", id_user);
+                        parametros.put("id_user", user_id);
                         parametros.put("operacion", operacion);
                         parametros.put("id_pelicula", id_pelicula);
                         parametros.put("tipo", tipo);
@@ -106,7 +103,7 @@ public class FDatosPeli extends Fragment implements Response.Listener<JSONObject
                         e.printStackTrace();
                     }
 
-                    peliculas_user(parametros);
+                    peliculas_user(parametros,tipo,true);
                 }
             }
         });
@@ -122,11 +119,38 @@ public class FDatosPeli extends Fragment implements Response.Listener<JSONObject
                     fbTime.setImageResource(R.drawable.checked);
                     operacion = "insert";
                     fbTime.setTag("1");
+
+                    parametros = null;
+                    parametros = new JSONObject();
+                    try {
+                        parametros.put("id_user", user_id);
+                        parametros.put("operacion", operacion);
+                        parametros.put("id_pelicula", id_pelicula);
+                        parametros.put("tipo", tipo);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    peliculas_user(parametros,tipo, false);
+
                 }
                 else{
                     fbTime.setImageResource(R.drawable.clock);
                     operacion = "delete";
                     fbTime.setTag("0");
+
+                    parametros = null;
+                    parametros = new JSONObject();
+                    try {
+                        parametros.put("id_user", user_id);
+                        parametros.put("operacion", operacion);
+                        parametros.put("id_pelicula", id_pelicula);
+                        parametros.put("tipo", tipo);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    peliculas_user(parametros,tipo, true);
                 }
 
             }
@@ -144,11 +168,39 @@ public class FDatosPeli extends Fragment implements Response.Listener<JSONObject
                     fbEye.setImageResource(R.drawable.eye_blocked);
                     operacion = "insert";
                     fbEye.setTag("1");
+
+                    parametros = null;
+                    parametros = new JSONObject();
+                    try {
+                        parametros.put("id_user", user_id);
+                        parametros.put("operacion", operacion);
+                        parametros.put("id_pelicula", id_pelicula);
+                        parametros.put("tipo", tipo);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    peliculas_user(parametros,tipo, false);
+
                 }
                 else{
                     fbEye.setImageResource(R.drawable.eye);
                     operacion = "delete";
                     fbEye.setTag("0");
+
+                    parametros = null;
+                    parametros = new JSONObject();
+                    try {
+                        parametros.put("id_user", user_id);
+                        parametros.put("operacion", operacion);
+                        parametros.put("id_pelicula", id_pelicula);
+                        parametros.put("tipo", tipo);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    peliculas_user(parametros,tipo, true);
+
                 }
             }
 
@@ -166,6 +218,8 @@ public class FDatosPeli extends Fragment implements Response.Listener<JSONObject
         actores = vista.findViewById(R.id.tvActores2);
 
         cargarDatos();
+
+        recuperarPreferenciasUsuario();
 
         return vista;
     }
@@ -332,7 +386,7 @@ public class FDatosPeli extends Fragment implements Response.Listener<JSONObject
     }
 
 
-    public void peliculas_user(JSONObject parametros){
+    public void peliculas_user(JSONObject parametros, final String tipo, final Boolean estado){
 
         String url = getString(R.string.url);
         url = url + "/Peliculas_user.php";
@@ -347,10 +401,143 @@ public class FDatosPeli extends Fragment implements Response.Listener<JSONObject
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toast.makeText(getContext(),"Se ha producido un error",Toast.LENGTH_SHORT).show();
+
+                if(estado){
+
+                    switch (tipo){
+
+                        case "favorita":    fbFav.setImageResource(R.drawable.favorite);
+                                            fbFav.setTag("0");
+                                            break;
+
+                        case "pendiente":   fbTime.setImageResource(R.drawable.checked);
+                                            fbTime.setTag("0");
+                                            break;
+
+                        case "vista":       fbEye.setImageResource(R.drawable.eye_blocked);
+                                            fbEye.setTag("0");
+                                            break;
+                    }
+
+                }
+                else{
+
+                    switch (tipo){
+
+                        case "favorita":    fbFav.setImageResource(R.drawable.star);
+                                            fbFav.setTag("1");
+                                            break;
+
+                        case "pendiente":   fbTime.setImageResource(R.drawable.clock);
+                                            fbTime.setTag("1");
+                                            break;
+
+                        case "vista":       fbEye.setImageResource(R.drawable.eye);
+                                            fbEye.setTag("1");
+                                            break;
+                    }
+
+                }
+
+
+
             }
         });
 
         request.add(jsonObjectRequest);
+
+    }
+
+    public void recuperarPreferenciasUsuario(){
+
+        String url = getString(R.string.url);
+        url = url + "/Preferencias_user.php";
+
+        parametros = null;
+        parametros = new JSONObject();
+        try {
+            parametros.put("id_user", user_id);
+            parametros.put("id_pelicula", id_pelicula);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, parametros, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+                try {
+                    JSONArray jsonArray = response.getJSONArray("preferencias");
+
+                    JSONObject json = jsonArray.getJSONObject(0);
+
+                    if(!json.optBoolean("error")){
+
+                        if(json.optBoolean("favorita")){
+
+                            fbFav.setImageResource(R.drawable.star);
+                            fbFav.setTag("1");
+
+                        }
+                        else{
+
+                            fbFav.setImageResource(R.drawable.favorite);
+                            fbFav.setTag("0");
+                        }
+
+
+                        if(json.optBoolean("pendiente")){
+
+                            fbTime.setImageResource(R.drawable.checked);
+                            fbTime.setTag("1");
+
+                        }
+                        else{
+
+                            fbTime.setImageResource(R.drawable.clock);
+                            fbTime.setTag("0");
+
+                        }
+
+                        if(json.optBoolean("vista")){
+
+                            fbEye.setImageResource(R.drawable.eye_blocked);
+                            fbEye.setTag("1");
+
+                        }
+                        else{
+
+                            fbEye.setImageResource(R.drawable.eye);
+                            fbEye.setTag("0");
+
+                        }
+
+
+                    }
+                    else{
+
+                        Toast.makeText(getContext(),"No se pudieron recuperar sus preferencias",Toast.LENGTH_SHORT).show();
+
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                Toast.makeText(getContext(),"Se ha producido un error. \nNo se pudieron recuperar sus preferencias",Toast.LENGTH_SHORT).show();
+
+
+            }
+        });
+
+        request.add(jsonObjectRequest);
+
 
     }
 
