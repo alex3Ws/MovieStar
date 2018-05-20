@@ -162,7 +162,7 @@ public class FTrailerPeli extends Fragment implements Response.Listener<JSONObje
     @Override
     public void onErrorResponse(VolleyError error) {
 
-        Toast.makeText(getContext(),"Error",Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(),"Error al cargar los trailers",Toast.LENGTH_SHORT).show();
 
     }
 

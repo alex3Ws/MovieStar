@@ -1,5 +1,6 @@
 package com.example.moviestar.moviestar;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -29,7 +30,7 @@ public class AreaPersonal extends AppCompatActivity {
 
     String id;
     TextView titulo;
-
+    int user_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +56,7 @@ public class AreaPersonal extends AppCompatActivity {
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
 
-
+        user_id = getIntent().getIntExtra("user_id",0);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarInfoAreaPersonal);
 
@@ -78,6 +79,7 @@ public class AreaPersonal extends AppCompatActivity {
 
 
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -152,6 +154,10 @@ public class AreaPersonal extends AppCompatActivity {
 
                     case 0:
                         FPeliculas_favoritas fPeliculas_favoritas = new FPeliculas_favoritas();
+
+                        info.putInt("user_id", user_id);
+
+                        fPeliculas_favoritas.setArguments(info);
 
                         return fPeliculas_favoritas;
 

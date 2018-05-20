@@ -82,6 +82,7 @@ public class InfoPeliculas extends AppCompatActivity {
         imagen = findViewById(R.id.imcaratula);
 
         String json = getIntent().getStringExtra("json");
+        id = getIntent().getStringExtra("id");
         user_id = getIntent().getIntExtra("user_id",0);
 
         try {
@@ -94,7 +95,7 @@ public class InfoPeliculas extends AppCompatActivity {
         tabLayout.addTab(tabLayout.newTab().setText("Trailers"));
         tabLayout.addTab(tabLayout.newTab().setText("Criticas"));
 
-        id = getIntent().getStringExtra("id");
+
 
 
         Picasso.get().load(urlBaseImagenes+jsonObject.optString("backdrop_path")).placeholder(getApplicationContext().getResources().getDrawable(R.drawable.cinefondo)).error(getApplicationContext().getResources().getDrawable(R.drawable.cinefondo)).resize(1100,605).into(fondo);

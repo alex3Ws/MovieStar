@@ -116,6 +116,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_gallery) {
 
             Intent intent = new Intent(getApplicationContext(),AreaPersonal.class);
+            intent.putExtra("user_id",user_id);
             startActivity(intent);
 
         } else if (id == R.id.nav_slideshow) {
