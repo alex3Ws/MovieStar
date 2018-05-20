@@ -2,46 +2,41 @@ package com.example.moviestar.moviestar;
 
 import android.graphics.Color;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
-import com.example.moviestar.moviestar.Fragments.FCriticasPeli;
-import com.example.moviestar.moviestar.Fragments.FDatosPeli;
-import com.example.moviestar.moviestar.Fragments.FTrailerPeli;
-import com.squareup.picasso.Picasso;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-public class InfoPeliculas extends AppCompatActivity {
+import com.example.moviestar.moviestar.Fragments.FPeliculas_favoritas;
+import com.example.moviestar.moviestar.Fragments.FPeliculas_pendientes;
+import com.example.moviestar.moviestar.Fragments.FPeliculas_vistas;
+
+
+public class AreaPersonal extends AppCompatActivity {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
 
 
     String id;
-    JSONObject jsonObject;
-    String urlBaseImagenes = "http://image.tmdb.org/t/p/w500";
     TextView titulo;
-    ImageView fondo, imagen;
-    int user_id;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_info_peliculas);
+        setContentView(R.layout.activity_area_personal);
 
 
 
@@ -51,10 +46,10 @@ public class InfoPeliculas extends AppCompatActivity {
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.contenedorPelis);
+        mViewPager = (ViewPager) findViewById(R.id.contenedorAreaPersonal);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabsAreaPersonal);
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
@@ -62,7 +57,7 @@ public class InfoPeliculas extends AppCompatActivity {
 
 
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarInfo);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarInfoAreaPersonal);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -77,34 +72,9 @@ public class InfoPeliculas extends AppCompatActivity {
         }
 
 
-        titulo = findViewById(R.id.tvTitulo);
-        fondo = findViewById(R.id.ivfondo);
-        imagen = findViewById(R.id.imcaratula);
-
-        String json = getIntent().getStringExtra("json");
-        user_id = getIntent().getIntExtra("user_id",0);
-
-        try {
-            jsonObject = new JSONObject(json);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        tabLayout.addTab(tabLayout.newTab().setText("Datos"));
-        tabLayout.addTab(tabLayout.newTab().setText("Trailers"));
-        tabLayout.addTab(tabLayout.newTab().setText("Criticas"));
-
-        id = getIntent().getStringExtra("id");
-
-
-        Picasso.get().load(urlBaseImagenes+jsonObject.optString("backdrop_path")).placeholder(getApplicationContext().getResources().getDrawable(R.drawable.cinefondo)).error(getApplicationContext().getResources().getDrawable(R.drawable.cinefondo)).resize(1100,605).into(fondo);
-
-
-        Picasso.get().load(urlBaseImagenes+jsonObject.optString("poster_path")).placeholder(getApplicationContext().getResources().getDrawable(R.drawable.cinefondo)).error(getApplicationContext().getResources().getDrawable(R.drawable.cinefondo)).resize(520,680).into(imagen);
-
-        titulo.setText(jsonObject.optString("title"));
-
-
+        tabLayout.addTab(tabLayout.newTab().setText("Favoritas"));
+        tabLayout.addTab(tabLayout.newTab().setText("Pendientes"));
+        tabLayout.addTab(tabLayout.newTab().setText("Vistas"));
 
 
     }
@@ -152,7 +122,7 @@ public class InfoPeliculas extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_datos_peli, container, false);
+            View rootView = inflater.inflate(R.layout.fragment_peliculas_favoritas, container, false);
             return rootView;
         }
     }
@@ -181,31 +151,23 @@ public class InfoPeliculas extends AppCompatActivity {
                 switch (position){
 
                     case 0:
+                        FPeliculas_favoritas fPeliculas_favoritas = new FPeliculas_favoritas();
 
-                            FDatosPeli fDatosPeli = new FDatosPeli();
-
-                            info.putString("jsonObject", jsonObject.toString());
-                            info.putInt("user_id",user_id);
-                            fDatosPeli.setArguments(info);
-
-
-                            return fDatosPeli;
+                        return fPeliculas_favoritas;
 
 
                     case 1:
+                        FPeliculas_pendientes fPeliculas_pendientes = new FPeliculas_pendientes();
 
-                            FTrailerPeli fTrailerPeli = new FTrailerPeli();
+                        return fPeliculas_pendientes;
 
-                            info.putString("id",id);
-                            fTrailerPeli.setArguments(info);
 
-                            return fTrailerPeli;
 
                     case 2:
-                            FCriticasPeli fCriticasPeli = new FCriticasPeli();
+                        FPeliculas_vistas fPeliculas_vistas = new FPeliculas_vistas();
 
+                        return fPeliculas_vistas;
 
-                            return fCriticasPeli;
 
                 }
 

@@ -33,7 +33,11 @@
         <activity
             android:name=".InfoPeliculas"
             android:label="@string/title_activity_info_peliculas"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".AreaPersonal"
+            android:label="@string/title_activity_area_personal"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

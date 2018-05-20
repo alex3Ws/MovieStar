@@ -1,10 +1,7 @@
 package com.example.moviestar.moviestar;
 
-import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -15,7 +12,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.example.moviestar.moviestar.Fragments.FAreaPersonal;
 import com.example.moviestar.moviestar.Fragments.FPeliculas;
 
 public class MainActivity extends AppCompatActivity
@@ -33,6 +29,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
 
         /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -118,7 +115,8 @@ public class MainActivity extends AppCompatActivity
             fragmentManager.beginTransaction().replace(R.id.contenedor, fPeliculas).commit();
         } else if (id == R.id.nav_gallery) {
 
-            fragmentManager.beginTransaction().replace(R.id.contenedor, new FAreaPersonal()).commit();
+            Intent intent = new Intent(getApplicationContext(),AreaPersonal.class);
+            startActivity(intent);
 
         } else if (id == R.id.nav_slideshow) {
 
