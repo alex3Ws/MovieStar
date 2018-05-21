@@ -147,7 +147,7 @@ public class AreaPersonal extends AppCompatActivity {
             // Return a PlaceholderFragment (defined as a static inner class below).
             //return PlaceholderFragment.newInstance(position + 1);
 
-            Bundle info = new Bundle();
+            Bundle info ;
 
 
                 switch (position){
@@ -155,6 +155,7 @@ public class AreaPersonal extends AppCompatActivity {
                     case 0:
                         FPeliculas_favoritas fPeliculas_favoritas = new FPeliculas_favoritas();
 
+                        info = new Bundle();
                         info.putInt("user_id", user_id);
 
                         fPeliculas_favoritas.setArguments(info);
@@ -164,6 +165,10 @@ public class AreaPersonal extends AppCompatActivity {
 
                     case 1:
                         FPeliculas_pendientes fPeliculas_pendientes = new FPeliculas_pendientes();
+
+                        info = new Bundle();
+                        info.putInt("user_id", user_id);
+                        fPeliculas_pendientes.setArguments(info);
 
                         return fPeliculas_pendientes;
 

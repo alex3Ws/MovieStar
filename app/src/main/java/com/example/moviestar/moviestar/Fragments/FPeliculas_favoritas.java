@@ -45,11 +45,9 @@ public class FPeliculas_favoritas extends Fragment {
     ArrayList<JSONObject> responses;
     RecyclerViewAdapterPreferenciasUsuario adapter;
     GridLayoutManager manager;
-    ProgressBar progressBar;
     String preferencia = "favoritas";
     JSONObject jsonObject;
     int user_id;
-    boolean flag = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -72,12 +70,8 @@ public class FPeliculas_favoritas extends Fragment {
         responses = new ArrayList<>();
 
 
-
-
-        llamarApi();
-
-
-
+        adapter = new RecyclerViewAdapterPreferenciasUsuario(getContext(),peliculas,user_id,responses);
+        recyclerViewFavoritas.setAdapter(adapter);
 
 
         return vista;
@@ -88,6 +82,7 @@ public class FPeliculas_favoritas extends Fragment {
 
         String url = getString(R.string.url);
         url = url + "/Preferencias_user_all.php";
+        id_pelicula.clear();
 
         JSONObject json = new JSONObject();
 
@@ -145,6 +140,8 @@ public class FPeliculas_favoritas extends Fragment {
             }
         });
 
+
+
         request.add(jsonObjectRequest);
 
 
@@ -155,6 +152,8 @@ public class FPeliculas_favoritas extends Fragment {
 
         int id;
 
+        peliculas.clear();
+        responses.clear();
         for(int i = 0; i<ids.size(); i++){
 
             id = (int) ids.get(i);
@@ -180,7 +179,7 @@ public class FPeliculas_favoritas extends Fragment {
                     peliculas.add(p);
                     responses.add(jsonObject);
 
-
+                    adapter.notifyDataSetChanged();
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -195,8 +194,16 @@ public class FPeliculas_favoritas extends Fragment {
 
         }
 
-        adapter = new RecyclerViewAdapterPreferenciasUsuario(getContext(),peliculas,user_id,responses);
-        recyclerViewFavoritas.setAdapter(adapter);
+
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        llamarApi();
+        Toast.makeText(getContext(),"Favoritas - onResume",Toast.LENGTH_SHORT).show();
+        FPeliculas_pendientes fp = new FPeliculas_pendientes();
+        fp.onPause();
+    }
 }
