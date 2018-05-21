@@ -3,6 +3,7 @@ package com.example.moviestar.moviestar.Adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,18 +37,29 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     Intent intent;
     String id;
     int user_id;
+    String procedencia_llamada;
 
-    public RecyclerViewAdapter(Context context,ArrayList<Pelicula> peliculas,int  user_id){
+    public RecyclerViewAdapter(Context context,ArrayList<Pelicula> peliculas,int  user_id, String procedencia_llamada){
         this.context = context;
         this.peliculas = peliculas;
         this.user_id = user_id;
+        this.procedencia_llamada = procedencia_llamada;
     }
 
     @NonNull
     @Override
     public VHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View vista;
 
-        View vista = LayoutInflater.from(parent.getContext()).inflate(R.layout.peliculasview,parent,false);
+        if(procedencia_llamada.equals("FBusqueda_Pelicula")){
+
+           vista = LayoutInflater.from(parent.getContext()).inflate(R.layout.busquedapeliculasview,parent,false);
+        }
+        else{
+
+            vista = LayoutInflater.from(parent.getContext()).inflate(R.layout.peliculasview,parent,false);
+        }
+
 
         return new VHolder(vista);
     }
@@ -75,8 +87,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         }
 
 
-
-        holder.imageView.setOnClickListener(new View.OnClickListener() {
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -140,6 +151,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     class VHolder extends RecyclerView.ViewHolder {
 
         ImageView imageView;
+        CardView cardView;
         TextView titulo, valoracion;
 
 
@@ -149,6 +161,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             imageView = itemView.findViewById(R.id.caratula);
             titulo =  itemView.findViewById(R.id.titulo);
             valoracion = itemView.findViewById(R.id.valoracion);
+            cardView = itemView.findViewById(R.id.cardView);
 
 
 

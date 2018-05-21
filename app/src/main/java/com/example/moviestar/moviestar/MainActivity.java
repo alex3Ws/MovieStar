@@ -14,17 +14,23 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.moviestar.moviestar.Fragments.FBusqueda_Pelicula;
 import com.example.moviestar.moviestar.Fragments.FPeliculas;
+import com.example.moviestar.moviestar.Fragments.FPeliculas_favoritas;
+import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     TextView prueba;
+    boolean flag = false;
     public String user_name;
     public int user_id;
     Bundle info;
-    boolean flag = false;
+    MaterialSearchView materialSearchView;
+    final android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +48,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-
+        materialSearchView = findViewById(R.id.busqueda);
 
         user_name = getIntent().getStringExtra("Usuario");
         user_id = getIntent().getIntExtra("id",0);
@@ -50,7 +56,6 @@ public class MainActivity extends AppCompatActivity
 
 
 
-        android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
         Bundle info2 = new Bundle();
         info2.putInt("id",user_id);
 
@@ -59,39 +64,71 @@ public class MainActivity extends AppCompatActivity
 
         fragmentManager.beginTransaction().replace(R.id.contenedor, fPeliculas).commit();
 
-    }
 
-    @Override
-    public void onBackPressed() {
-        /*DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }*/
+        materialSearchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+
+                flag = true;
+
+                FBusqueda_Pelicula fBusqueda_pelicula = new FBusqueda_Pelicula();
+
+                Bundle info = new Bundle();
+                info.putInt("user_id", user_id);
+                info.putString("query",query);
+                fBusqueda_pelicula.setArguments(info);
+
+                fragmentManager.beginTransaction().replace(R.id.contenedor, fBusqueda_pelicula).commit();
+
+
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
+
+
+
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+
+        getMenuInflater().inflate(R.menu.busqueda, menu);
+
+        MenuItem item = menu.findItem(R.id.search);
+        materialSearchView.setMenuItem(item);
+
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+            if(flag) {
+                info = null;
+                info = new Bundle();
+                info.putInt("id",user_id);
+
+                FPeliculas fPeliculas = new FPeliculas();
+                fPeliculas.setArguments(info);
+
+                fragmentManager.beginTransaction().replace(R.id.contenedor, fPeliculas).commit();
+                flag = false;
+            }
         }
 
-        return super.onOptionsItemSelected(item);
+
     }
+
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -105,7 +142,7 @@ public class MainActivity extends AppCompatActivity
 
         }*/
 
-        android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+
 
         if (id == R.id.nav_camera) {
 

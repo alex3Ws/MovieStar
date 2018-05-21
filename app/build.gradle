@@ -35,5 +35,5 @@ dependencies {
     implementation files('libs/commons-io-2.6.jar')
     implementation files('libs/bcpkix-jdk15on-159.jar')
     implementation files('libs/bcprov-ext-jdk15on-159.jar')
-    implementation
+    implementation 'com.miguelcatalan:materialsearchview:1.4.0'
 }

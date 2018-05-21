@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView
     android:id="@+id/cardView"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginBottom="8dp"
@@ -13,10 +13,10 @@
 
     <RelativeLayout
         android:id="@+id/prueba"
-        android:layout_width="176dp"
-        android:layout_height="246dp"
-        android:padding="2dp"
-        android:layout_marginTop="2dp">
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp">
 
         <RelativeLayout
             android:id="@+id/rlimagen"
@@ -31,35 +31,37 @@
 
         </RelativeLayout>
 
-
         <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/rlimagen">
+            android:layout_width="179dp"
+            android:layout_height="198dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true">
 
             <TextView
                 android:id="@+id/titulo"
-                android:layout_width="109dp"
+                android:layout_width="153dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
-                android:layout_alignTop="@+id/valoracion"
-                android:layout_marginStart="11dp"
-                android:layout_marginTop="3dp"
+                android:layout_alignParentTop="true"
+                android:textSize="20sp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="17dp"
                 android:text="TextView"
                 android:textColor="#000" />
 
             <TextView
                 android:id="@+id/valoracion"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
-                android:layout_marginEnd="2dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
                 android:text="5.0"
-                android:textSize="20sp" />
+                android:textSize="50sp" />
 
         </RelativeLayout>
-
 
 
     </RelativeLayout>

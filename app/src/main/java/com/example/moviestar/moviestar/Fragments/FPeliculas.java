@@ -54,6 +54,7 @@ public class FPeliculas extends Fragment implements Response.Listener<JSONObject
     ProgressBar progressBar;
     int user_id;
     NavigationView navigationView;
+    String procedencia_llamada = "FPeliculas";
 
 
 
@@ -78,7 +79,7 @@ public class FPeliculas extends Fragment implements Response.Listener<JSONObject
         recycledPeliculas.setHasFixedSize(true);
         recycledPeliculas.setLayoutManager(manager);
 
-        adapter = new RecyclerViewAdapter(getContext(), listaPeliculas, user_id);
+        adapter = new RecyclerViewAdapter(getContext(), listaPeliculas, user_id,procedencia_llamada);
         recycledPeliculas.setAdapter(adapter);
 
         navigationView = getActivity().findViewById(R.id.nav_view);
@@ -95,6 +96,7 @@ public class FPeliculas extends Fragment implements Response.Listener<JSONObject
 
         return vista;
     }
+
 
     public void llamarApi(){
 
