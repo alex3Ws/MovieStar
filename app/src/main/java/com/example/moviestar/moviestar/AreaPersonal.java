@@ -64,6 +64,8 @@ public class AreaPersonal extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back);
 
+
+
         int myColor = Color.parseColor("#303F9F");
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -147,16 +149,14 @@ public class AreaPersonal extends AppCompatActivity {
             // Return a PlaceholderFragment (defined as a static inner class below).
             //return PlaceholderFragment.newInstance(position + 1);
 
-            Bundle info ;
+            Bundle info = new Bundle();;
+            info.putInt("user_id", user_id);
 
 
                 switch (position){
 
                     case 0:
                         FPeliculas_favoritas fPeliculas_favoritas = new FPeliculas_favoritas();
-
-                        info = new Bundle();
-                        info.putInt("user_id", user_id);
 
                         fPeliculas_favoritas.setArguments(info);
 
@@ -166,8 +166,6 @@ public class AreaPersonal extends AppCompatActivity {
                     case 1:
                         FPeliculas_pendientes fPeliculas_pendientes = new FPeliculas_pendientes();
 
-                        info = new Bundle();
-                        info.putInt("user_id", user_id);
                         fPeliculas_pendientes.setArguments(info);
 
                         return fPeliculas_pendientes;
@@ -176,6 +174,8 @@ public class AreaPersonal extends AppCompatActivity {
 
                     case 2:
                         FPeliculas_vistas fPeliculas_vistas = new FPeliculas_vistas();
+
+                        fPeliculas_vistas.setArguments(info);
 
                         return fPeliculas_vistas;
 
@@ -193,5 +193,11 @@ public class AreaPersonal extends AppCompatActivity {
         }
 
 
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return false;
     }
 }

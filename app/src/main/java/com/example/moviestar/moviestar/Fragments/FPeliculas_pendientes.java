@@ -77,6 +77,8 @@ public class FPeliculas_pendientes extends Fragment {
         String url = getString(R.string.url);
         url = url + "/Preferencias_user_all.php";
         id_pelicula.clear();
+        peliculas.clear();
+        responses.clear();
 
         JSONObject json = new JSONObject();
 
@@ -112,7 +114,10 @@ public class FPeliculas_pendientes extends Fragment {
                             id_pelicula.add(id_peli);
                         }
 
-                        llamarPeliculas(id_pelicula);;
+                        if(id_pelicula.size() > 0)
+                            llamarPeliculas(id_pelicula);
+                        else
+                            adapter.notifyDataSetChanged();
 
 
                     } catch (JSONException e) {
@@ -146,8 +151,7 @@ public class FPeliculas_pendientes extends Fragment {
 
         int id;
 
-        peliculas.clear();
-        responses.clear();
+
         for(int i = 0; i<ids.size(); i++){
 
             id = (int) ids.get(i);
@@ -179,7 +183,7 @@ public class FPeliculas_pendientes extends Fragment {
                 @Override
                 public void onErrorResponse(VolleyError error) {
 
-                    Toast.makeText(getContext(),"Error FPeliculas_pedientes",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(),"Error FPeliculas_favorita",Toast.LENGTH_SHORT).show();
 
                 }
             });
@@ -196,6 +200,6 @@ public class FPeliculas_pendientes extends Fragment {
         super.onResume();
 
         llamarApi();
-        Toast.makeText(getContext(),"Pendientes - onResume", Toast.LENGTH_SHORT).show();
+
     }
 }
