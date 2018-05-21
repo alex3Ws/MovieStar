@@ -5,11 +5,13 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.CircularProgressDrawable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -51,6 +53,7 @@ public class FPeliculas extends Fragment implements Response.Listener<JSONObject
     GridLayoutManager manager;
     ProgressBar progressBar;
     int user_id;
+    NavigationView navigationView;
 
 
 
@@ -62,6 +65,7 @@ public class FPeliculas extends Fragment implements Response.Listener<JSONObject
 
         listaPeliculas = new ArrayList<>();
         listaGeneros = new ArrayList<>();
+
 
 
         user_id = getArguments().getInt("id");
@@ -77,6 +81,7 @@ public class FPeliculas extends Fragment implements Response.Listener<JSONObject
         adapter = new RecyclerViewAdapter(getContext(), listaPeliculas, user_id);
         recycledPeliculas.setAdapter(adapter);
 
+        navigationView = getActivity().findViewById(R.id.nav_view);
 
 
         adapter.notifyDataSetChanged();
@@ -274,5 +279,11 @@ public class FPeliculas extends Fragment implements Response.Listener<JSONObject
 
         adapter.notifyDataSetChanged();
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        navigationView.getMenu().getItem(0).setChecked(true);
     }
 }
