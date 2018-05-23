@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/amigosLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+
+    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/imagenPerfil"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="5dp"
+        android:src="@drawable/cinefondo"
+        app:civ_border_color="#FF000000"
+        app:civ_border_width="2dp" />
+
+    <TextView
+        android:id="@+id/tvAmigo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/imagenPerfil"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="20dp"
+        android:text="alex3Ws"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvPais"
+        android:layout_below="@id/tvAmigo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/imagenPerfil"
+        android:layout_alignStart="@+id/tvAmigo"
+        android:text="España" />
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/buttonAmigos"
+        android:backgroundTint="@color/colorAccent"
+        app:cardCornerRadius="10dp"
+        android:elevation="20dp"
+        android:layout_alignStart="@id/tvAmigo"
+        android:layout_width="60dp"
+        android:layout_height="25dp"
+        android:layout_alignTop="@+id/tvAmigo"
+        android:layout_marginTop="12dp"
+        android:layout_marginStart="200dp">
+
+
+        <TextView
+            android:id="@+id/textView3"
+            android:textSize="12sp"
+            android:textColor="#FFFFFF"
+            android:layout_gravity="center"
+            android:text="Añadir"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </android.support.v7.widget.CardView>
+
+    <View
+        android:id="@+id/separator"
+        android:layout_below="@+id/imagenPerfil"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="@color/colorAccent" />
+
+</RelativeLayout>

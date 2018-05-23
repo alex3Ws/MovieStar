@@ -36,4 +36,5 @@ dependencies {
     implementation files('libs/bcpkix-jdk15on-159.jar')
     implementation files('libs/bcprov-ext-jdk15on-159.jar')
     implementation 'com.miguelcatalan:materialsearchview:1.4.0'
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
 }

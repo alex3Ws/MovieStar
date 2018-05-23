@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.moviestar.moviestar.Fragments.FAmigos;
 import com.example.moviestar.moviestar.Fragments.FBusqueda_Pelicula;
 import com.example.moviestar.moviestar.Fragments.FPeliculas;
 import com.example.moviestar.moviestar.Fragments.FPeliculas_favoritas;
@@ -165,6 +166,9 @@ public class MainActivity extends AppCompatActivity
 
 
         } else if (id == R.id.nav_slideshow) {
+
+            FAmigos amigos = new FAmigos();
+            fragmentManager.beginTransaction().replace(R.id.contenedor, amigos).commit();
 
         } else if (id == R.id.nav_manage) {
 
