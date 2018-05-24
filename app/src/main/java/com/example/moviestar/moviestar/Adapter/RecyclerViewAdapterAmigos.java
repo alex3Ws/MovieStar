@@ -48,9 +48,9 @@ public class RecyclerViewAdapterAmigos extends RecyclerView.Adapter<RecyclerView
 
         final Amigo amigo = amigos.get(position);
 
-        /*if(position == (amigos.size() - 1)){
+        if(position == (amigos.size() - 1)){
             holder.separator.setVisibility(View.GONE);
-        }*/
+        }
 
 
         holder.nombreAmigo.setText(amigo.getNombreUsuario());
