@@ -28,16 +28,21 @@
         <activity
             android:name=".MainActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:label="@string/title_activity_main"
+            android:label="MovieStar"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".InfoPeliculas"
-            android:label="@string/title_activity_info_peliculas"
+            android:label="Información"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".AreaPersonal"
             android:label="@string/title_activity_area_personal"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".AreaAmigos"
+            android:label="Amigos"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".PeticionesAmistad"></activity>
     </application>
 
 </manifest>

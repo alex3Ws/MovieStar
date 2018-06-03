@@ -24,5 +24,6 @@
     <string name="tab_text_3">Tab 3</string>
     <string name="title_activity_info_peliculas">InfoPeliculas</string>
     <string name="title_activity_area_personal">Área Personal</string>
+    <string name="title_activity_area_amigos">AreaAmigos</string>
 
 </resources>

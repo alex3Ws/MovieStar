@@ -1,7 +1,11 @@
 package com.example.moviestar.moviestar.Entidades;
 
-public class Amigo {
+import android.os.Parcel;
+import android.os.Parcelable;
 
+public class Amigo implements Parcelable {
+
+    private int id;
     private String urlImagen;
     private String nombreUsuario;
     private String Pais;
@@ -13,6 +17,14 @@ public class Amigo {
         this.urlImagen = urlImagen;
         this.nombreUsuario = nombreUsuario;
         Pais = pais;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getUrlImagen() {
@@ -38,4 +50,37 @@ public class Amigo {
     public void setPais(String pais) {
         Pais = pais;
     }
+
+    protected Amigo(Parcel in) {
+        id = in.readInt();
+        urlImagen = in.readString();
+        nombreUsuario = in.readString();
+        Pais = in.readString();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(urlImagen);
+        dest.writeString(nombreUsuario);
+        dest.writeString(Pais);
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Amigo> CREATOR = new Parcelable.Creator<Amigo>() {
+        @Override
+        public Amigo createFromParcel(Parcel in) {
+            return new Amigo(in);
+        }
+
+        @Override
+        public Amigo[] newArray(int size) {
+            return new Amigo[size];
+        }
+    };
 }

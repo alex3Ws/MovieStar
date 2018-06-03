@@ -1,9 +1,7 @@
 package com.example.moviestar.moviestar;
 
-import android.content.ClipData;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.constraint.Group;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -13,14 +11,26 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.moviestar.moviestar.Fragments.FAmigos;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.moviestar.moviestar.Entidades.Amigo;
 import com.example.moviestar.moviestar.Fragments.FBusqueda_Pelicula;
 import com.example.moviestar.moviestar.Fragments.FPeliculas;
-import com.example.moviestar.moviestar.Fragments.FPeliculas_favoritas;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -31,7 +41,12 @@ public class MainActivity extends AppCompatActivity
     public int user_id;
     Bundle info;
     MaterialSearchView materialSearchView;
+    NavigationView navigationView;
     final android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+    RequestQueue request;
+    ArrayList<Amigo> amigosArray;
+
+    boolean peticionesAmistad = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,15 +61,16 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         materialSearchView = findViewById(R.id.busqueda);
 
-        user_name = getIntent().getStringExtra("Usuario");
-        user_id = getIntent().getIntExtra("id",0);
+        //user_name = getIntent().getStringExtra("Usuario");
+        user_id = getIntent().getIntExtra("user_id",0);
 
-
+        amigosArray = new ArrayList<>();
+        request = Volley.newRequestQueue(getApplicationContext());
 
 
         Bundle info2 = new Bundle();
@@ -90,7 +106,6 @@ public class MainActivity extends AppCompatActivity
                 return false;
             }
         });
-
 
 
 
@@ -143,13 +158,13 @@ public class MainActivity extends AppCompatActivity
 
         }*/
 
-
+        info = null;
+        info = new Bundle();
+        info.putInt("id",user_id);
 
         if (id == R.id.nav_camera) {
 
-            info = null;
-            info = new Bundle();
-            info.putInt("id",user_id);
+
 
             FPeliculas fPeliculas = new FPeliculas();
             fPeliculas.setArguments(info);
@@ -165,10 +180,31 @@ public class MainActivity extends AppCompatActivity
 
 
 
-        } else if (id == R.id.nav_slideshow) {
 
-            FAmigos amigos = new FAmigos();
-            fragmentManager.beginTransaction().replace(R.id.contenedor, amigos).commit();
+
+        } else if (id == R.id.nav_slideshow) {
+            Intent intent;
+
+
+            if(peticionesAmistad) {
+                intent = new Intent(getApplicationContext(),PeticionesAmistad.class);
+                intent.putExtra("peticiones", amigosArray);
+
+
+            }
+            else{
+
+                intent = new Intent(getApplicationContext(),AreaAmigos.class);
+
+            }
+            intent.putExtra("user_id",user_id);
+
+            startActivity(intent);
+
+
+
+
+
 
         } else if (id == R.id.nav_manage) {
 
@@ -182,5 +218,98 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void  comprobarPeticiones() {
+
+        String url = getString(R.string.url);
+
+        amigosArray.clear();
+
+        JSONObject parametros = new JSONObject();
+
+        try {
+            parametros.put("id_user", user_id);
+            parametros.put("aceptado",0);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        url = url + "/ConsultarAmigos.php";
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, parametros, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+                try {
+
+                    if(response.has("amigos")){
+
+                        peticionesAmistad = true;
+                        JSONArray jsonArray = response.getJSONArray("amigos");
+
+
+                        for(int i = 0; i<jsonArray.length(); i++){
+
+                            JSONObject jsonObject = null;
+                            jsonObject = jsonArray.optJSONObject(i);
+
+                            Amigo amigo = new Amigo();
+
+                            amigo.setId(Integer.parseInt(jsonObject.optString("id_user")));
+                            amigo.setNombreUsuario(jsonObject.optString("nombre"));
+
+                            amigosArray.add(amigo);
+
+                        }
+
+                        MenuItem item = navigationView.getMenu().getItem(2);
+
+                        RelativeLayout rl = (RelativeLayout) item.getActionView();
+
+                        rl.setVisibility(View.VISIBLE);
+                        TextView tv = rl.findViewById(R.id.numeroNotificacion);
+                        tv.setText(String.valueOf(amigosArray.size()));
+
+                    }
+                    else
+                    {
+                        peticionesAmistad = false;
+                        MenuItem item = navigationView.getMenu().getItem(2);
+
+                        RelativeLayout rl = (RelativeLayout) item.getActionView();
+
+                        rl.setVisibility(View.GONE);
+
+                    }
+
+
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                Toast.makeText(getApplicationContext(),"dsgads",Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        request.add(jsonObjectRequest);
+
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+       comprobarPeticiones();
+
+
     }
 }

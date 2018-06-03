@@ -119,8 +119,8 @@ public class LogInActivity extends AppCompatActivity implements Response.Listene
 
                 default:                            acceder = new Intent(getApplicationContext(),MainActivity.class);
                                                     acceder.putExtra("Usuario",user);
-                                                    int id = jsonObject.optInt("id");
-                                                    acceder.putExtra("id",id);
+                                                    int id = jsonObject.optInt("id_user");
+                                                    acceder.putExtra("user_id",id);
                                                     startActivity(acceder);
             }
 
