@@ -13,7 +13,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,10 +41,12 @@ public class RecyclerViewAdapterAmigos extends RecyclerView.Adapter<RecyclerView
     private Context context;
     private Activity Activity;
     private ArrayList<Amigo> amigos;
+    private ArrayList<Amigo> amigosAux;
     private String id;
     private int user_id;
     private RequestQueue request;
     private String identificador;
+    private  EditText search;
 
     public RecyclerViewAdapterAmigos(Context context, ArrayList<Amigo> amigos, int user_id, String identificador,Activity Activity){
         this.context = context;
@@ -51,6 +55,18 @@ public class RecyclerViewAdapterAmigos extends RecyclerView.Adapter<RecyclerView
         this.identificador = identificador;
         this.Activity = Activity;
         request = Volley.newRequestQueue(context);
+
+    }
+
+    public RecyclerViewAdapterAmigos(Context context, ArrayList<Amigo> amigos, int user_id, String identificador, Activity Activity, EditText search){
+        this.context = context;
+        this.amigos = amigos;
+        this.user_id = user_id;
+        this.identificador = identificador;
+        this.Activity = Activity;
+        request = Volley.newRequestQueue(context);
+        this.amigosAux = this.amigos;
+        this.search = search;
     }
 
     @NonNull
@@ -110,7 +126,7 @@ public class RecyclerViewAdapterAmigos extends RecyclerView.Adapter<RecyclerView
 
                                 public void onClick(DialogInterface dialog, int whichButton) {
 
-                                    gestionarPeticiones(amigo.getId(),"borrar");
+                                    gestionarPeticiones(amigo,"borrar");
                                     amigos.remove(amigo);
                                     notifyItemRemoved(position);
 
@@ -136,11 +152,7 @@ public class RecyclerViewAdapterAmigos extends RecyclerView.Adapter<RecyclerView
                             .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
                                 public void onClick(DialogInterface dialog, int whichButton) {
-                                    gestionarPeticiones(amigo.getId(),"peticion");
-
-                                    amigos.remove(amigo);
-                                    notifyItemRemoved(position);
-
+                                    gestionarPeticiones(amigo,"peticion");
 
                                 }})
                             .setNegativeButton(android.R.string.no, null).show();
@@ -164,7 +176,7 @@ public class RecyclerViewAdapterAmigos extends RecyclerView.Adapter<RecyclerView
                             .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
                                 public void onClick(DialogInterface dialog, int whichButton) {
-                                    gestionarPeticiones(amigo.getId(),"aceptado");
+                                    gestionarPeticiones(amigo,"aceptado");
 
                                     amigos.remove(amigo);
                                     notifyItemRemoved(position);
@@ -205,7 +217,7 @@ public class RecyclerViewAdapterAmigos extends RecyclerView.Adapter<RecyclerView
                             .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
                                 public void onClick(DialogInterface dialog, int whichButton) {
-                                    gestionarPeticiones(amigo.getId(),"rechazado");
+                                    gestionarPeticiones(amigo,"rechazado");
                                     amigos.remove(amigo);
                                     notifyItemRemoved(position);
 
@@ -283,7 +295,9 @@ public class RecyclerViewAdapterAmigos extends RecyclerView.Adapter<RecyclerView
 
     }
 
-    private void gestionarPeticiones(int id , String operacion){
+    private void gestionarPeticiones(final Amigo amigo , String operacion){
+
+        int id = amigo.getId();
 
         String url = context.getString(R.string.url);
 
@@ -300,9 +314,18 @@ public class RecyclerViewAdapterAmigos extends RecyclerView.Adapter<RecyclerView
         }
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, parametros, new Response.Listener<JSONObject>() {
+
             @Override
             public void onResponse(JSONObject response) {
 
+                if(identificador.equals("listaUsuarios")){
+
+                    Toast.makeText(context,"Se ha enviado una peticion de amistad a "+ amigo.getNombreUsuario(),Toast.LENGTH_SHORT).show();
+                    amigosAux.remove(amigo);
+                    filtrarAmigos(amigosAux);
+                    search.setText("");
+
+                }
 
 
             }
@@ -310,6 +333,7 @@ public class RecyclerViewAdapterAmigos extends RecyclerView.Adapter<RecyclerView
             @Override
             public void onErrorResponse(VolleyError error) {
 
+                Toast.makeText(context,"Se ha producido un error",Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -327,7 +351,5 @@ public class RecyclerViewAdapterAmigos extends RecyclerView.Adapter<RecyclerView
         notifyDataSetChanged();
 
     }
-
-
 
 }

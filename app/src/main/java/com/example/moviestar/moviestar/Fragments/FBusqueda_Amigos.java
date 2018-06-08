@@ -38,6 +38,7 @@ public class FBusqueda_Amigos extends Fragment {
     LinearLayoutManager manager;
     ArrayList<Amigo> amigos;
     EditText busqueda;
+    Boolean flag = false;
 
 
     @Override
@@ -48,16 +49,17 @@ public class FBusqueda_Amigos extends Fragment {
 
         user_id = getArguments().getInt("user_id");
         amigos = new ArrayList<>();
+        busqueda = vista.findViewById(R.id.busquedaAmigos);
         recyclerView = vista.findViewById(R.id.recyclerListaUsuarios);
         manager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(manager);
 
-        adapterAmigos = new RecyclerViewAdapterAmigos(getContext(),amigos,user_id,"listaUsuarios",getActivity());
+        adapterAmigos = new RecyclerViewAdapterAmigos(getContext(),amigos,user_id,"listaUsuarios",getActivity(),busqueda);
         recyclerView.setAdapter(adapterAmigos);
 
         request = Volley.newRequestQueue(getContext());
 
-        busqueda = vista.findViewById(R.id.busquedaAmigos);
+
 
         busqueda.addTextChangedListener(new TextWatcher() {
             @Override
@@ -74,7 +76,9 @@ public class FBusqueda_Amigos extends Fragment {
             @Override
             public void afterTextChanged(Editable s) {
 
-                filtrar(s.toString());
+                    filtrar(s.toString());
+
+
             }
         });
 
@@ -102,7 +106,7 @@ public class FBusqueda_Amigos extends Fragment {
             }
 
         }
-
+        //flag = false;
         adapterAmigos.filtrarAmigos(filtro);
 
     }
@@ -148,7 +152,7 @@ public class FBusqueda_Amigos extends Fragment {
 
                 }
 
-                adapterAmigos.notifyDataSetChanged();
+                    adapterAmigos.notifyDataSetChanged();
 
 
             }
