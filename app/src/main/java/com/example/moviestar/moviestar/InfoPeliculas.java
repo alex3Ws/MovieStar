@@ -41,6 +41,7 @@ public class InfoPeliculas extends AppCompatActivity {
 
 
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_info_peliculas);
 
 
@@ -104,6 +105,8 @@ public class InfoPeliculas extends AppCompatActivity {
         Picasso.get().load(urlBaseImagenes+jsonObject.optString("poster_path")).placeholder(getApplicationContext().getResources().getDrawable(R.drawable.cinefondo)).error(getApplicationContext().getResources().getDrawable(R.drawable.cinefondo)).resize(520,680).into(imagen);
 
         titulo.setText(jsonObject.optString("title"));
+
+        setTitle(jsonObject.optString("title"));
 
 
 

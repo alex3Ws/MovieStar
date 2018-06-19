@@ -42,7 +42,12 @@
             android:name=".AreaAmigos"
             android:label="Amigos"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".PeticionesAmistad"></activity>
+        <activity android:name=".PeticionesAmistad" />
+
+        <activity
+            android:name=".CrearGrupo"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan"/>
     </application>
 
 </manifest>

@@ -23,6 +23,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.moviestar.moviestar.Entidades.Amigo;
 import com.example.moviestar.moviestar.Fragments.FBusqueda_Pelicula;
+import com.example.moviestar.moviestar.Fragments.FGrupos;
 import com.example.moviestar.moviestar.Fragments.FPeliculas;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
@@ -153,10 +154,6 @@ public class MainActivity extends AppCompatActivity
 
         int id = item.getItemId();
 
-        /*if(!flag){
-
-
-        }*/
 
         info = null;
         info = new Bundle();
@@ -207,6 +204,11 @@ public class MainActivity extends AppCompatActivity
 
 
         } else if (id == R.id.nav_manage) {
+
+            FGrupos fGrupos = new FGrupos();
+            fGrupos.setArguments(info);
+
+            fragmentManager.beginTransaction().replace(R.id.contenedor, fGrupos).commit();
 
         } else if (id == R.id.nav_share) {
 

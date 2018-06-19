@@ -6,8 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,7 +24,6 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.moviestar.moviestar.AreaAmigos;
 import com.example.moviestar.moviestar.Entidades.Amigo;
-import com.example.moviestar.moviestar.Fragments.FAmigos;
 import com.example.moviestar.moviestar.R;
 import com.squareup.picasso.Picasso;
 
@@ -187,7 +183,6 @@ public class RecyclerViewAdapterAmigos extends RecyclerView.Adapter<RecyclerView
 
                                         Intent intent = new Intent(context,AreaAmigos.class);
 
-                                        intent.putExtra("flagPeticiones",false);
                                         intent.putExtra("user_id",user_id);
 
                                         context.startActivity(intent);
@@ -225,7 +220,7 @@ public class RecyclerViewAdapterAmigos extends RecyclerView.Adapter<RecyclerView
 
                                         Intent intent = new Intent(context,AreaAmigos.class);
 
-                                        intent.putExtra("flagPeticiones",false);
+
                                         intent.putExtra("user_id",user_id);
 
                                         context.startActivity(intent);
@@ -276,7 +271,7 @@ public class RecyclerViewAdapterAmigos extends RecyclerView.Adapter<RecyclerView
                 imagenPerfil = itemView.findViewById(R.id.imagenPerfil);
                 nombreAmigo = itemView.findViewById(R.id.tvAmigo);
                 paisAmigo = itemView.findViewById(R.id.tvPais);
-                aceptar = itemView.findViewById(R.id.buttonAceptar);
+                aceptar = itemView.findViewById(R.id.buttonAccion);
                 rechazar = itemView.findViewById(R.id.buttonRechazar);
                 separator = itemView.findViewById(R.id.separator);
             }

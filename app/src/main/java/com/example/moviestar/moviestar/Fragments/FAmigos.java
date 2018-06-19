@@ -66,7 +66,7 @@ public class FAmigos extends Fragment {
 
         request = Volley.newRequestQueue(getContext());
 
-        adapter = new RecyclerViewAdapterAmigos(getContext(),amigos,3,"amigos",Activity);
+        adapter = new RecyclerViewAdapterAmigos(getContext(),amigos,user_id,"amigos",Activity);
         recyclerAmigos.setAdapter(adapter);
 
         consultarAmigos();

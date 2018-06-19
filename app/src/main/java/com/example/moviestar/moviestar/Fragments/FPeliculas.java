@@ -101,7 +101,7 @@ public class FPeliculas extends Fragment implements Response.Listener<JSONObject
     public void llamarApi(){
 
 
-        String url  = "https://api.themoviedb.org/3/discover/movie?api_key=a2424ed363ead46acaa726cf8cb45bad&language=en-US&" +
+        String url  = "https://api.themoviedb.org/3/discover/movie?api_key=a2424ed363ead46acaa726cf8cb45bad&language=es-ES&" +
                 "sort_by=popularity.desc&include_adult=false&include_video=false&page="+cont;
 
 
