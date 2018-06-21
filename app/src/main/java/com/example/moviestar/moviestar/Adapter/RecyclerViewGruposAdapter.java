@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -28,6 +29,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.moviestar.moviestar.AreaAmigos;
 import com.example.moviestar.moviestar.Entidades.Amigo;
+import com.example.moviestar.moviestar.Entidades.Grupo;
 import com.example.moviestar.moviestar.Fragments.FAmigos;
 import com.example.moviestar.moviestar.R;
 import com.squareup.picasso.Picasso;
@@ -40,30 +42,32 @@ import java.util.ArrayList;
 public class RecyclerViewGruposAdapter extends RecyclerView.Adapter<RecyclerViewGruposAdapter.VHolder>{
 
     private Context context;
-    //private  ArrayList<Grupo> grupos;
+    private  ArrayList<Grupo> grupos;
     private ArrayList<Amigo> amigos;
     private ArrayList<Amigo> amigosAñadidos;
     private int user_id;
     TextView amigosAñadidosText;
     private String identificador;
-    boolean flagButton;
+    private int contador;
+    private TextView numeroParticipantes;
 
-    /*public RecyclerViewGruposAdapter(Context context, ArrayList<Grupo> grupos, int user_id, String identificador,){
+    public RecyclerViewGruposAdapter(Context context, ArrayList<Grupo> grupos, int user_id, String identificador){
         this.context = context;
         this.grupos = grupos;
         this.user_id = user_id;
         this.identificador = identificador;
 
-    }*/
+    }
 
-    public RecyclerViewGruposAdapter(Context context, ArrayList<Amigo> amigos, int user_id, String identificador, TextView amigosAñadidos){
+    public RecyclerViewGruposAdapter(Context context, ArrayList<Amigo> amigos, int user_id, String identificador, TextView amigosAñadidos, TextView numeroParticipantes){
         this.context = context;
         this.amigos = amigos;
         this.user_id = user_id;
         this.identificador = identificador;
         this.amigosAñadidos = new ArrayList<>();
         this.amigosAñadidosText = amigosAñadidos;
-        this.flagButton = false;
+        this.contador = 1;
+        this.numeroParticipantes = numeroParticipantes;
     }
 
 
@@ -76,8 +80,13 @@ public class RecyclerViewGruposAdapter extends RecyclerView.Adapter<RecyclerView
 
         if(identificador.equals("grupos"))
             vista = LayoutInflater.from(parent.getContext()).inflate(R.layout.gruposview,parent,false);
-        else
-            vista = LayoutInflater.from(parent.getContext()).inflate(R.layout.gruposamigosview,parent,false);
+        else {
+            vista = LayoutInflater.from(parent.getContext()).inflate(R.layout.gruposamigosview, parent, false);
+
+            if (vista.getLayoutParams ().width == RecyclerView.LayoutParams.MATCH_PARENT)
+                vista.getLayoutParams ().width = parent.getWidth ();
+
+        }
 
 
         return new VHolder(vista);
@@ -87,6 +96,32 @@ public class RecyclerViewGruposAdapter extends RecyclerView.Adapter<RecyclerView
     public void onBindViewHolder(@NonNull final VHolder holder, int position) {
 
         if(identificador.equals("grupos")){
+            final Grupo grupo = grupos.get(position);
+
+            if(grupo.getUrlImagen() != null){
+
+                Picasso.get().load(grupo.getUrlImagen()).noFade().placeholder(context.getResources().getDrawable(R.drawable.cinefondo)).error(context.getResources().getDrawable(R.drawable.cinefondo)).resize(500,600).into(holder.imagen);
+
+            }
+            else{
+
+                holder.imagen.setImageResource(R.drawable.cinefondo);
+
+            }
+
+            holder.titulo.setText(grupo.getNombre_grupo());
+            holder.fecha.setText(grupo.getFecha());
+            holder.participantes.setText(String.valueOf(grupo.getNumero_participantes())+"/10");
+
+            holder.grupo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Toast.makeText(context,"Grupo",Toast.LENGTH_SHORT).show();
+
+                }
+            });
+
 
 
 
@@ -99,45 +134,67 @@ public class RecyclerViewGruposAdapter extends RecyclerView.Adapter<RecyclerView
             holder.amigo.setText(amigo.getNombreUsuario());
             holder.pais.setText(amigo.getPais());
 
+            Boolean flagButton = false;
 
             holder.button.setOnClickListener(new View.OnClickListener() {
                 @SuppressLint("ResourceAsColor")
                 @Override
                 public void onClick(View v) {
 
-                    if(!flagButton){
+                    String textoAccion = holder.accion.getText().toString();
 
-                        holder.accion.setText("Quitar");
-                        holder.button.setBackgroundColor(R.color.red);
-                        amigosAñadidos.add(amigo);
-                        String texto = amigosAñadidosText.getText().toString();
-                        amigosAñadidosText.setText(texto + ", " + amigo.getNombreUsuario());
+                    if(textoAccion.equals("Añadir")){
+
+                        if(contador < 10){
+                            holder.accion.setText("Quitar");
+                            holder.button.setCardBackgroundColor(Color.parseColor("#FF0000"));
+                            amigosAñadidos.add(amigo);
+                            contador++;
+
+                            String texto = amigosAñadidosText.getText().toString();
+
+                            if(texto.equals(""))
+                                amigosAñadidosText.setText(amigo.getNombreUsuario());
+                            else
+                                amigosAñadidosText.setText(texto + ", " + amigo.getNombreUsuario());
+                        }
+                        else{
+                            Toast.makeText(context,"Solo puede haber como máximo 10 participantes",Toast.LENGTH_SHORT).show();
+                        }
+
+
 
 
                     }
                     else {
 
                         holder.accion.setText("Añadir");
-                        holder.button.setBackgroundColor(R.color.green);
+                        holder.button.setCardBackgroundColor(Color.parseColor("#68D853"));
                         amigosAñadidos.remove(amigo);
+                        contador--;
+                        String texto = "";
 
                         for(int i = 0; i < amigosAñadidos.size(); i++){
 
-                            if(i == amigosAñadidos.size() -1 ){
-                                String texto = amigo.getNombreUsuario();
-                            }
-                            else{
-                                String texto = amigo.getNombreUsuario()+",";
-                            }
+                                Amigo amigo = amigosAñadidos.get(i);
+                                if(i == amigosAñadidos.size() -1){
+                                    texto = texto + amigo.getNombreUsuario();
+                                }
+                                else{
+                                    texto = texto + amigo.getNombreUsuario()+",";
+                                }
 
 
                         }
+                        amigosAñadidosText.setText(texto);
+
+
 
                     }
 
 
 
-
+                    numeroParticipantes.setText(contador+"/10");
 
 
                 }
@@ -152,7 +209,7 @@ public class RecyclerViewGruposAdapter extends RecyclerView.Adapter<RecyclerView
 
         if(identificador.equals("grupos")){
 
-            return amigos.size(); //CAMBIAR ESTO A GRUPOS.SIZE() --------------------------------------
+            return grupos.size();
         }
         else{
             return amigos.size();

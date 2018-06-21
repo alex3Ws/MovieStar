@@ -23,7 +23,7 @@
 
 
     <EditText
-        android:id="@+id/tbnombre"
+        android:id="@+id/tbnombreGrupo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -31,7 +31,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:ems="10"
-        android:text="Nombre del grupo"
+        android:hint="Nombre del grupo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.093"
@@ -48,13 +48,14 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:ems="10"
+        android:hint="dd-mm-yy"
+        android:focusable="false"
         android:inputType="textPersonName"
-        android:text="dd/mm/yy"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.093"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tbnombre"
+        app:layout_constraintTop_toBottomOf="@+id/tbnombreGrupo"
         app:layout_constraintVertical_bias="0.024" />
 
     <ImageView
@@ -74,14 +75,14 @@
         app:srcCompat="@drawable/calendario" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/tvamigosAñadidos"
         android:layout_width="226dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="TextView"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.1"
@@ -97,14 +98,14 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="0/10"
+        android:text="1/10"
         android:textAlignment="center"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.638"
-        app:layout_constraintStart_toEndOf="@+id/textView2"
-        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        app:layout_constraintStart_toEndOf="@+id/tvamigosAñadidos"
+        app:layout_constraintTop_toBottomOf="@+id/tvamigosAñadidos"
         app:layout_constraintVertical_bias="0.0" />
 
     <View
@@ -124,11 +125,27 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerAmigosGrupo"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="267dp"
+        android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view2" />
+        app:layout_constraintTop_toBottomOf="@+id/view2"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/bCrearGrupo"
+        android:layout_width="0dp"
+        android:layout_height="66dp"
+        android:backgroundTint="@color/colorAccent"
+        android:text="Crear"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerAmigosGrupo"
+        app:layout_constraintVertical_bias="1.0" />
 
 </android.support.constraint.ConstraintLayout>

@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -39,14 +40,19 @@ import java.util.Calendar;
 public class CrearGrupo extends AppCompatActivity {
 
     ImageView bfecha;
-    EditText tbfecha;
+    EditText tbfecha,tbNombreGrupo;
     int user_id;
     RecyclerView recyclerAmigosGrupos;
     LinearLayoutManager manager;
     RecyclerViewGruposAdapter adapter;
     ArrayList<Amigo> amigos;
     RequestQueue request;
-    TextView amigosAñadidos;
+    TextView amigosAñadidos,numeroParticipantes;
+    Button bCrearGrupo;
+    ArrayList<Amigo> amigosGrupo;
+    int participantes;
+    String ids_amigos;
+    int id_grupo_creado;
 
     @SuppressLint("WrongViewCast")
     @Override
@@ -75,6 +81,10 @@ public class CrearGrupo extends AppCompatActivity {
 
         bfecha = findViewById(R.id.bfecha);
         tbfecha = findViewById(R.id.tbfecha);
+        tbNombreGrupo = findViewById(R.id.tbnombreGrupo);
+        amigosAñadidos = findViewById(R.id.tvamigosAñadidos);
+        numeroParticipantes = findViewById(R.id.tvnumero);
+        bCrearGrupo = findViewById(R.id.bCrearGrupo);
 
         bfecha.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,7 +98,25 @@ public class CrearGrupo extends AppCompatActivity {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
 
-                        String fecha = dayOfMonth+"/"+month+"/"+year;
+                        String fecha;
+
+                        if(dayOfMonth<10){
+
+                            if(month<10){
+                                 fecha = "0"+dayOfMonth+"-0"+month+"-"+year;
+                            }
+                            else {
+                                 fecha = "0"+dayOfMonth+"-"+month+"-"+year;
+                            }
+
+                        }
+                        else if(month<10){
+                             fecha = dayOfMonth+"-0"+month+"-"+year;
+                        }
+                        else {
+                            fecha = dayOfMonth+"-"+month+"-"+year;
+                        }
+
 
                         tbfecha.setText(fecha);
 
@@ -106,16 +134,63 @@ public class CrearGrupo extends AppCompatActivity {
         amigos = new ArrayList<>();
         recyclerAmigosGrupos = findViewById(R.id.recyclerAmigosGrupo);
 
-        manager = new LinearLayoutManager(getApplicationContext());
+        manager = new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false);
         recyclerAmigosGrupos.setHasFixedSize(true);
         recyclerAmigosGrupos.setLayoutManager(manager);
 
-        adapter = new RecyclerViewGruposAdapter(getApplicationContext(),amigos,user_id,"amigos",amigosAñadidos);
+        adapter = new RecyclerViewGruposAdapter(getApplicationContext(),amigos,user_id,"amigos",amigosAñadidos,numeroParticipantes);
         recyclerAmigosGrupos.setAdapter(adapter);
 
         request = Volley.newRequestQueue(getApplicationContext());
 
         recuperarAmigos();
+
+        bCrearGrupo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(!tbNombreGrupo.getText().toString().equals("")){
+
+                    if(!tbfecha.getText().toString().equals("")){
+
+                        if(!amigosAñadidos.getText().toString().equals("")){
+
+                            amigosGrupo = adapter.getAmigosAñadidos();
+
+                            int tamaño = amigosGrupo.size();
+
+                            ids_amigos = "";
+
+                            for(int i = 0; i < tamaño; i++){
+
+                                ids_amigos = ids_amigos +","+ String.valueOf(amigosGrupo.get(i).getId());
+
+                            }
+
+                            participantes = tamaño + 1;
+
+
+                            crearGrupo();
+
+
+
+                        }
+                        else{
+                            Toast.makeText(getApplicationContext(),"Se debe añadir un amigo como mínimo", Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                    else{
+                        Toast.makeText(getApplicationContext(),"Seleccione una fecha", Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+                else {
+                    Toast.makeText(getApplicationContext(),"Introduzca un nombre para el grupo", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
 
     }
 
@@ -155,7 +230,6 @@ public class CrearGrupo extends AppCompatActivity {
 
                         JSONArray jsonArray = response.getJSONArray("amigos");
 
-                        Toast.makeText(getApplicationContext(),"okkkk",Toast.LENGTH_SHORT).show();
 
                         for(int i = 0; i<jsonArray.length(); i++){
 
@@ -186,7 +260,7 @@ public class CrearGrupo extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
 
-                Toast.makeText(getApplicationContext(),"koooo",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),"No se pudo recuperar la lista de amigos",Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -196,5 +270,50 @@ public class CrearGrupo extends AppCompatActivity {
 
     }
 
+    private void crearGrupo(){
+
+        String url = getString(R.string.url);
+
+        JSONObject parametros = new JSONObject();
+
+        String nombre = tbNombreGrupo.getText().toString();
+        String fecha = tbfecha.getText().toString();
+
+        try {
+            parametros.put("id_user", user_id);
+            parametros.put("participantes",ids_amigos);
+            parametros.put("nombre_grupo",nombre);
+            parametros.put("fecha",fecha);
+            parametros.put("numero_participantes",participantes);
+
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        url = url + "/crearGrupo.php";
+
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, parametros, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+                id_grupo_creado = response.optInt("grupo");
+
+                Toast.makeText(getApplicationContext(),String.valueOf(id_grupo_creado),Toast.LENGTH_SHORT).show();
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+
+                Toast.makeText(getApplicationContext(),"Se ha producido un error al crear el grupo",Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        request.add(jsonObjectRequest);
+
+    }
 
 }
