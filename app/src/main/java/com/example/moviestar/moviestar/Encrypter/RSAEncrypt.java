@@ -18,10 +18,6 @@ import android.util.Log;
 
 public class RSAEncrypt {
 
-
-
-
-
         private String publicKey;
 
         public RSAEncrypt(String clave) {

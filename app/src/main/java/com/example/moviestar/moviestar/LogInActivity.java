@@ -19,7 +19,9 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.moviestar.moviestar.Encrypter.RSAEncrypt;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,6 +37,7 @@ public class LogInActivity extends AppCompatActivity implements Response.Listene
     RequestQueue request;
     JsonObjectRequest jsonObjectRequest;
     Intent acceder;
+    String id,clave,Tnombre,Tcontrasena,EncryptedNombre,EncryptedContrasena;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +56,8 @@ public class LogInActivity extends AppCompatActivity implements Response.Listene
             @Override
             public void onClick(View v) {
 
-                //Toast.makeText(getApplicationContext(),"Se ha iniciado sesion correctamente",Toast.LENGTH_SHORT).show();
-                consumirWS();
+
+                recuperarClave();
 
             }
         });
@@ -69,8 +72,8 @@ public class LogInActivity extends AppCompatActivity implements Response.Listene
         });
     }
 
-    private void consumirWS() {
 
+    private void recuperarClave() {
 
         progreso.setVisibility(View.VISIBLE);
 
@@ -79,15 +82,105 @@ public class LogInActivity extends AppCompatActivity implements Response.Listene
 
         String url = getString(R.string.url);
 
-        url  = url +"/ConsultarUsuario.php?nombre="+usuario.getText().toString()+"&contrasena="+contrasena.getText().toString();
-
-        //String url = "http://192.168.140.1/WebServices_PHP/RegistrarUsuario.php?nombre="+nombre.getText().toString()+
-          //      "&email="+email.getText().toString()+"&contrasena="+contrasena.getText().toString();
-
-        url = url.replace(" ","%20");
 
 
-        jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,url,null,this,this);
+        url = url + "/Claves.php";
+
+
+        jsonObjectRequest = new JsonObjectRequest(url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+
+                    JSONArray json = response.getJSONArray("PK");
+
+                    JSONObject json2 = json.getJSONObject(0);
+
+                    id = String.valueOf(json2.optInt("id"));
+
+                    if (!id.equals("No se ha podido generar la clave")) {
+                        clave = json2.optString("clave");
+                        consumirWS();
+                    } else {
+                        usuario.setFocusable(true);
+                        usuario.setFocusableInTouchMode(true);
+                        contrasena.setFocusable(true);
+                        contrasena.setFocusableInTouchMode(true);
+                        Toast.makeText(getApplicationContext(), "No se ha podido realizar el Login", Toast.LENGTH_SHORT).show();
+                    }
+
+                } catch (JSONException e) {
+
+                    usuario.setFocusable(true);
+                    usuario.setFocusableInTouchMode(true);
+                    contrasena.setFocusable(true);
+                    contrasena.setFocusableInTouchMode(true);
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                usuario.setFocusable(true);
+                usuario.setFocusableInTouchMode(true);
+                contrasena.setFocusable(true);
+                contrasena.setFocusableInTouchMode(true);
+                Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+            }
+        });
+        request.add(jsonObjectRequest);
+    }
+
+    private void consumirWS() {
+
+
+
+        progreso.setVisibility(View.VISIBLE);
+
+        usuario.setFocusable(false);
+        contrasena.setFocusable(false);
+
+        RSAEncrypt rsa = new RSAEncrypt(clave);
+        Tnombre = usuario.getText().toString();
+
+        try {
+            EncryptedNombre = rsa.encrypt(Tnombre);
+            EncryptedNombre = EncryptedNombre.replace("\n", "").replace("+", "@");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+
+        Tcontrasena = contrasena.getText().toString();
+
+        try {
+            EncryptedContrasena = rsa.encrypt(Tcontrasena);
+            EncryptedContrasena = EncryptedContrasena.replace("\n", "").replace("+", "@");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        JSONObject parametros = new JSONObject();
+
+        try {
+
+            parametros.put("nombre",EncryptedNombre);
+            parametros.put("contrasena",EncryptedContrasena);
+            parametros.put("id",id);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        String url = getString(R.string.url);
+
+        url  = url +"/ConsultarUsuario.php";
+
+
+
+
+        jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,url,parametros,this,this);
 
         request.add(jsonObjectRequest);
 
@@ -98,6 +191,8 @@ public class LogInActivity extends AppCompatActivity implements Response.Listene
     public void onResponse(JSONObject response) {
 
         progreso.setVisibility(View.GONE);
+
+        borrarClaves();
 
         try {
 
@@ -143,6 +238,8 @@ public class LogInActivity extends AppCompatActivity implements Response.Listene
     public void onErrorResponse(VolleyError error) {
         progreso.setVisibility(View.GONE);
 
+        borrarClaves();
+        
         usuario.setFocusable(true);
         usuario.setFocusableInTouchMode(true);
         contrasena.setFocusable(true);
@@ -153,4 +250,23 @@ public class LogInActivity extends AppCompatActivity implements Response.Listene
     }
 
 
+    public void borrarClaves(){
+
+        String url = getString(R.string.url);
+        url = url + "/Borrar.php?id="+id;
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+
+        });
+
+        request.add(stringRequest);
+    }
 }

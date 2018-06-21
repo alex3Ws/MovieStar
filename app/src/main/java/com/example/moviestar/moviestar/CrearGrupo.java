@@ -2,6 +2,7 @@ package com.example.moviestar.moviestar;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
@@ -13,7 +14,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,7 +24,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.moviestar.moviestar.Adapter.RecyclerViewAdapterAmigos;
 import com.example.moviestar.moviestar.Adapter.RecyclerViewGruposAdapter;
 import com.example.moviestar.moviestar.Entidades.Amigo;
 
@@ -32,8 +31,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.time.Month;
-import java.time.Year;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -299,8 +296,20 @@ public class CrearGrupo extends AppCompatActivity {
             public void onResponse(JSONObject response) {
 
                 id_grupo_creado = response.optInt("grupo");
+                //recuperarInformacionGrupo();
 
-                Toast.makeText(getApplicationContext(),String.valueOf(id_grupo_creado),Toast.LENGTH_SHORT).show();
+
+
+
+                Toast.makeText(getApplicationContext(),"Grupo creado correctamente",Toast.LENGTH_SHORT).show();
+
+
+                Intent intent = new Intent(getApplicationContext(), Grupos.class);
+                intent.putExtra("user_id",user_id);
+                intent.putExtra("id_grupo",id_grupo_creado);
+                intent.putExtra("identificador","crearGrupo");
+
+                startActivity(intent);
 
             }
         }, new Response.ErrorListener() {
@@ -315,5 +324,42 @@ public class CrearGrupo extends AppCompatActivity {
         request.add(jsonObjectRequest);
 
     }
+
+   /* public void recuperarInformacionGrupo(){
+
+
+        String url = getString(R.string.url);
+
+        JSONObject parametros = new JSONObject();
+
+
+        try {
+
+            parametros.put("id_grupo", id_grupo_creado);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        url = url + "/recuperarInformacionGrupo.php";
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, parametros, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+
+        request.add(jsonObjectRequest);
+
+
+    }*/
 
 }

@@ -137,7 +137,7 @@ public class SingUpActivity extends AppCompatActivity {
                             repetircontrasena.setFocusable(true);
                             repetircontrasena.setFocusableInTouchMode(true);
 
-                            Toast.makeText(getApplicationContext(), "No se ha podido completar e registro 1", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "No se ha podido completar el registro", Toast.LENGTH_SHORT).show();
                         }
 
                     } catch (JSONException e) {
@@ -253,6 +253,7 @@ public class SingUpActivity extends AppCompatActivity {
                                                                     break;
                             default:                                mensaje = "Se ha registrado correctamente";
                                                                     flag = 0;
+                                                                    borrarClaves();
                                                                     abrirLogin = new Intent(getApplicationContext(),LogInActivity.class);
                                                                     startActivity(abrirLogin);
                         }
@@ -301,23 +302,7 @@ public class SingUpActivity extends AppCompatActivity {
 
         if(flag == 1){
 
-            String url = getString(R.string.url);
-            url = url + "/Borrar.php?id="+id;
-            StringRequest stringRequest = new StringRequest(Request.Method.GET, url,new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    flag = 0;
-                }
-
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-
-                }
-
-            });
-
-            request.add(stringRequest);
+            borrarClaves();
         }
 
         super.onBackPressed();
@@ -329,24 +314,32 @@ public class SingUpActivity extends AppCompatActivity {
 
         if(flag == 1){
 
-            String url = getString(R.string.url);
-            url = url + "/Borrar.php?id="+id;
-            StringRequest stringRequest = new StringRequest(Request.Method.GET, url,new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    flag = 0;
-                }
+            borrarClaves();
 
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-
-                }
-
-            });
-
-            request.add(stringRequest);
         }
+
+    }
+
+    public void borrarClaves(){
+
+        String url = getString(R.string.url);
+        url = url + "/Borrar.php?id="+id;
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                flag = 0;
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+
+        });
+
+        request.add(stringRequest);
+
 
     }
 }

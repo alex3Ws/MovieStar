@@ -31,6 +31,7 @@ import com.example.moviestar.moviestar.AreaAmigos;
 import com.example.moviestar.moviestar.Entidades.Amigo;
 import com.example.moviestar.moviestar.Entidades.Grupo;
 import com.example.moviestar.moviestar.Fragments.FAmigos;
+import com.example.moviestar.moviestar.Grupos;
 import com.example.moviestar.moviestar.R;
 import com.squareup.picasso.Picasso;
 
@@ -117,8 +118,14 @@ public class RecyclerViewGruposAdapter extends RecyclerView.Adapter<RecyclerView
                 @Override
                 public void onClick(View v) {
 
-                    Toast.makeText(context,"Grupo",Toast.LENGTH_SHORT).show();
+                    int id_grupo_creado = grupo.getId_grupo();
 
+                    Intent intent = new Intent(context, Grupos.class);
+                    intent.putExtra("user_id",user_id);
+                    intent.putExtra("id_grupo",id_grupo_creado);
+                    intent.putExtra("identificador","fgrupos");
+
+                    context.startActivity(intent);
                 }
             });
 
