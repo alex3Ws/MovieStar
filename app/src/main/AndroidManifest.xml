@@ -14,6 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:screenOrientation="portrait"
             android:name=".LogInActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
@@ -23,31 +24,38 @@
             </intent-filter>
         </activity>
         <activity
+            android:screenOrientation="portrait"
             android:name=".SingUpActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".MainActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="MovieStar"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".InfoPeliculas"
             android:label="Información"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".AreaPersonal"
             android:label="@string/title_activity_area_personal"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".AreaAmigos"
             android:label="Amigos"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".PeticionesAmistad" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".CrearGrupo"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".Grupos"
             android:theme="@style/AppTheme.NoActionBar"/>
 

@@ -66,6 +66,7 @@ public class AreaPersonal extends AppCompatActivity {
 
 
 
+        //Poner status bar del mismo color que la toolbar
         int myColor = Color.parseColor("#303F9F");
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -181,6 +182,7 @@ public class AreaPersonal extends AppCompatActivity {
 
     }
 
+    //Asignar funcion de ir a atrás a la flecha de la toolbar
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();

@@ -20,6 +20,7 @@ public class PeticionesAmistad extends AppCompatActivity {
     LinearLayoutManager manager;
     RecyclerViewAdapterAmigos adapter;
     ArrayList<Amigo> amigosArray;
+    String user_name;
 
 
     @Override
@@ -31,6 +32,7 @@ public class PeticionesAmistad extends AppCompatActivity {
         amigosArray = getIntent().getParcelableArrayListExtra("peticiones");
 
         user_id = getIntent().getIntExtra("user_id",0);
+        user_name = getIntent().getStringExtra("user_name");
 
         recyclerAmigos = findViewById(R.id.recyclerPeticiones);
 
@@ -38,7 +40,7 @@ public class PeticionesAmistad extends AppCompatActivity {
         recyclerAmigos.setHasFixedSize(true);
         recyclerAmigos.setLayoutManager(manager);
 
-        adapter = new RecyclerViewAdapterAmigos(this, amigosArray, user_id,"peticiones",this);
+        adapter = new RecyclerViewAdapterAmigos(this, amigosArray, user_id,"peticiones",this,user_name);
         recyclerAmigos.setAdapter(adapter);
 
     }

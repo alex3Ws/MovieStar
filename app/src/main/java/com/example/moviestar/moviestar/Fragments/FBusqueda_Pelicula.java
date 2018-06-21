@@ -65,7 +65,6 @@ public class FBusqueda_Pelicula extends Fragment {
         texto = vista.findViewById(R.id.tvbusqueda);
         texto.setText(texto.getText().toString() + query);
 
-        //manager = new GridLayoutManager(getContext(), 2);
         manager2 = new LinearLayoutManager(getContext());
 
         recyclerView.setHasFixedSize(true);
@@ -84,6 +83,7 @@ public class FBusqueda_Pelicula extends Fragment {
         return vista;
     }
 
+    //Llamada a Api para recuperar las peliculas que cumplan el criterio de busqueda
     private void llamarApi() {
 
         String url = "https://api.themoviedb.org/3/search/movie?api_key=a2424ed363ead46acaa726cf8cb45bad&query="+query+"&language=es-ES";
@@ -160,6 +160,7 @@ public class FBusqueda_Pelicula extends Fragment {
 
     }
 
+    //Obtener nombre del genero a partir de id del genero devuelto por la Api
     public ArrayList<String> obtenerGeneros(int genero_id) {
         String genero = null;
 

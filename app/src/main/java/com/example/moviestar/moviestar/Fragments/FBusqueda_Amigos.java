@@ -86,13 +86,14 @@ public class FBusqueda_Amigos extends Fragment {
 
 
 
-        consultarAmigos();
+        consultarUsuarios();
 
 
 
         return vista;
     }
 
+    // Método para buscar usuarios dentro de la lista de usuarios obtenida
     private void filtrar(String busqueda){
 
         ArrayList<Amigo> filtro = new ArrayList<>();
@@ -111,7 +112,8 @@ public class FBusqueda_Amigos extends Fragment {
 
     }
 
-    private void consultarAmigos() {
+    //Llamada a WS para recuperar la lista de todos los usuarios
+    private void consultarUsuarios() {
 
         amigos.clear();
 

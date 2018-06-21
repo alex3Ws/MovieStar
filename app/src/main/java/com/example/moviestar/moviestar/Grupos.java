@@ -21,6 +21,8 @@ public class Grupos extends AppCompatActivity {
 
 
 
+
+        //Poner status bar del mismo color que la toolbar
         int myColor = Color.parseColor("#303F9F");
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -36,11 +38,10 @@ public class Grupos extends AppCompatActivity {
 
     }
 
+    // Asignar accion de volver a boton flecha de la toolbar
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
-
-        /*Poner intent para volver a FGrupos*/
 
         return false;
     }

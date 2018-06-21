@@ -68,6 +68,8 @@ public class FPeliculas_vistas extends Fragment {
 
         return vista;
     }
+
+    //Llamada a la Api para recuperar la lista de peliculas a partir del id
     private void llamarApi() {
 
 
@@ -144,6 +146,7 @@ public class FPeliculas_vistas extends Fragment {
 
     }
 
+    //Llamada a WS para recuperar la lista de peliculas vistas por el usuario
     private void llamarPeliculas(ArrayList ids) {
 
         int id;

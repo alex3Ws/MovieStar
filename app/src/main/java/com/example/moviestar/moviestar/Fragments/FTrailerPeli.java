@@ -91,6 +91,8 @@ public class FTrailerPeli extends Fragment implements Response.Listener<JSONObje
         return vista;
     }
 
+
+    //Llamadas a la Api para obtener la url del trailer de la pelicula tanto en español como en ingles, y en ingles subtitulado al español
     private void llamarApi() {
 
         String url  = "http://api.themoviedb.org/3/movie/"+id+"/videos?api_key=a2424ed363ead46acaa726cf8cb45bad&language=es-ES";

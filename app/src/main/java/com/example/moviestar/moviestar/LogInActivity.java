@@ -56,8 +56,24 @@ public class LogInActivity extends AppCompatActivity implements Response.Listene
             @Override
             public void onClick(View v) {
 
+                if(usuario.getText().toString().isEmpty() || contrasena.getText().toString().isEmpty()){
 
-                recuperarClave();
+                    Toast.makeText(getApplicationContext(),"Por favor, complete todos los campos", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    if(usuario.getText().toString().length() > 15){
+
+                        Toast.makeText(getApplicationContext(),"El usuario introducido es demasiado largo", Toast.LENGTH_SHORT).show();
+
+                    }
+                    else{
+                        recuperarClave();
+                    }
+
+                }
+
+
+
 
             }
         });
@@ -72,7 +88,7 @@ public class LogInActivity extends AppCompatActivity implements Response.Listene
         });
     }
 
-
+    //Llamada a WS para generar un par de claves RSA
     private void recuperarClave() {
 
         progreso.setVisibility(View.VISIBLE);
@@ -131,6 +147,7 @@ public class LogInActivity extends AppCompatActivity implements Response.Listene
         request.add(jsonObjectRequest);
     }
 
+    // Llamada a WS para comprobar el Login del usuario
     private void consumirWS() {
 
 
@@ -239,7 +256,7 @@ public class LogInActivity extends AppCompatActivity implements Response.Listene
         progreso.setVisibility(View.GONE);
 
         borrarClaves();
-        
+
         usuario.setFocusable(true);
         usuario.setFocusableInTouchMode(true);
         contrasena.setFocusable(true);
@@ -249,7 +266,7 @@ public class LogInActivity extends AppCompatActivity implements Response.Listene
         Log.i("Error", error.toString());
     }
 
-
+    //Llamada a WS para borrar el par de claves generadas anteriormente
     public void borrarClaves(){
 
         String url = getString(R.string.url);

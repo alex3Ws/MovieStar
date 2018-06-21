@@ -224,6 +224,7 @@ public class FDatosPeli extends Fragment implements Response.Listener<JSONObject
         return vista;
     }
 
+    //Cargar datos de la pelicula
     private void cargarDatos() {
 
 
@@ -385,7 +386,7 @@ public class FDatosPeli extends Fragment implements Response.Listener<JSONObject
         Toast.makeText(getContext(),"Algo ha ido mal", Toast.LENGTH_SHORT).show();
     }
 
-
+    //Llamada a WS para añadir o borrar preferencias del usuario(FAVORITAS,PENDIENTES O VISTAS)
     public void peliculas_user(JSONObject parametros, final String tipo, final Boolean estado){
 
         String url = getString(R.string.url);
@@ -448,6 +449,7 @@ public class FDatosPeli extends Fragment implements Response.Listener<JSONObject
 
     }
 
+    //Llamada a WS para recuperar las preferencias del usuario
     public void recuperarPreferenciasUsuario(){
 
         String url = getString(R.string.url);

@@ -26,6 +26,7 @@ public class AreaAmigos extends AppCompatActivity {
 
     private ViewPager mViewPager;
     int user_id;
+    String user_name;
     Intent intent;
 
     @Override
@@ -36,9 +37,11 @@ public class AreaAmigos extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarAmigos);
 
         user_id = getIntent().getIntExtra("user_id",0);
+        user_name = getIntent().getStringExtra("user_name");
 
         intent =  new Intent(getApplicationContext(), MainActivity.class);
         intent.putExtra("user_id",user_id);
+        intent.putExtra("Usuario",user_name);
 
 
         setSupportActionBar(toolbar);
@@ -59,6 +62,8 @@ public class AreaAmigos extends AppCompatActivity {
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
+
+        //Poner la status bar del mismo color que la toolbar
         int myColor = Color.parseColor("#303F9F");
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -163,6 +168,8 @@ public class AreaAmigos extends AppCompatActivity {
         }
     }
 
+
+    //Asignar funcion de ir a atrás a la flecha de la toolbar
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();

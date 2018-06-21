@@ -74,6 +74,7 @@ public class FAmigos extends Fragment {
         return vista;
     }
 
+    //Llamada a WS para recuperar los amigos del usuario
     private void consultarAmigos() {
 
         String url = getString(R.string.url);
@@ -104,7 +105,6 @@ public class FAmigos extends Fragment {
 
                         JSONArray jsonArray = response.getJSONArray("amigos");
 
-                        Toast.makeText(getContext(),"okkkk",Toast.LENGTH_SHORT).show();
 
                         for(int i = 0; i<jsonArray.length(); i++){
 
@@ -135,7 +135,7 @@ public class FAmigos extends Fragment {
             @Override
             public void onErrorResponse(VolleyError error) {
 
-                Toast.makeText(getContext(),"koooo",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),"Se ha producido un error al cargar la lista de amigos",Toast.LENGTH_SHORT).show();
 
             }
         });

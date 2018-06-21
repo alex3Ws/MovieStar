@@ -43,6 +43,7 @@ public class RecyclerViewAdapterAmigos extends RecyclerView.Adapter<RecyclerView
     private RequestQueue request;
     private String identificador;
     private  EditText search;
+    private String user_name;
 
     public RecyclerViewAdapterAmigos(Context context, ArrayList<Amigo> amigos, int user_id, String identificador,Activity Activity){
         this.context = context;
@@ -51,6 +52,17 @@ public class RecyclerViewAdapterAmigos extends RecyclerView.Adapter<RecyclerView
         this.identificador = identificador;
         this.Activity = Activity;
         request = Volley.newRequestQueue(context);
+
+    }
+
+    public RecyclerViewAdapterAmigos(Context context, ArrayList<Amigo> amigos, int user_id, String identificador,Activity Activity,String user_name){
+        this.context = context;
+        this.amigos = amigos;
+        this.user_id = user_id;
+        this.identificador = identificador;
+        this.Activity = Activity;
+        request = Volley.newRequestQueue(context);
+        this.user_name= user_name;
 
     }
 
@@ -64,6 +76,8 @@ public class RecyclerViewAdapterAmigos extends RecyclerView.Adapter<RecyclerView
         this.amigosAux = this.amigos;
         this.search = search;
     }
+
+
 
     @NonNull
     @Override
@@ -103,7 +117,7 @@ public class RecyclerViewAdapterAmigos extends RecyclerView.Adapter<RecyclerView
         }
         else{
 
-            holder.imagenPerfil.setImageResource(R.drawable.cinefondo);
+            holder.imagenPerfil.setImageResource(R.drawable.usuario);
 
         }
 
@@ -184,6 +198,7 @@ public class RecyclerViewAdapterAmigos extends RecyclerView.Adapter<RecyclerView
                                         Intent intent = new Intent(context,AreaAmigos.class);
 
                                         intent.putExtra("user_id",user_id);
+                                        intent.putExtra("user_name",user_name);
 
                                         context.startActivity(intent);
 

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,6 +27,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 public class SingUpActivity extends AppCompatActivity {
     TextView login;
@@ -69,14 +71,30 @@ public class SingUpActivity extends AppCompatActivity {
 
                     if(contrasena.getText().toString().equals(repetircontrasena.getText().toString())){
 
-                        if(!email.getText().toString().contains("@") || !email.getText().toString().contains(".")){
+                        if(contrasena.getText().toString().length() > 25){
 
-                            Toast.makeText(getApplicationContext(),"Introduzca un email valido",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(),"La contraseña introducida no puede ser superior a 25 caracteres",Toast.LENGTH_SHORT).show();
+
                         }
                         else{
 
 
-                            consumirWS();
+                            if(!validarEmail(email.getText().toString())){
+
+                                Toast.makeText(getApplicationContext(),"Introduzca un email valido",Toast.LENGTH_SHORT).show();
+                            }
+                            else{
+
+                                if(nombre.getText().toString().length() >15){
+
+                                    Toast.makeText(getApplicationContext(),"El nombre de usuario introducido no puede ser superior a 15 caracteres",Toast.LENGTH_SHORT).show();
+                                }
+                                else{
+                                    consumirWS();
+                                }
+
+                        }
+
                         }
                     }
                     else{
@@ -96,6 +114,7 @@ public class SingUpActivity extends AppCompatActivity {
 
     }
 
+    //Llamada a WS para generar un par de claves RSA
     private void consumirWS() {
 
 
@@ -174,7 +193,7 @@ public class SingUpActivity extends AppCompatActivity {
         }
     }
 
-
+    //Llamada a WS para realizar el registro del usuario
     private void registrar(){
 
             RSAEncrypt rsa = new RSAEncrypt(clave);
@@ -320,6 +339,7 @@ public class SingUpActivity extends AppCompatActivity {
 
     }
 
+    //Llamada a WS para borrar el par de claves generados anteriormente
     public void borrarClaves(){
 
         String url = getString(R.string.url);
@@ -341,5 +361,11 @@ public class SingUpActivity extends AppCompatActivity {
         request.add(stringRequest);
 
 
+    }
+
+    //Comprobar que la forma del email sea valida
+    private boolean validarEmail(String email) {
+        Pattern pattern = Patterns.EMAIL_ADDRESS;
+        return pattern.matcher(email).matches();
     }
 }

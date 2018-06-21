@@ -91,6 +91,7 @@ public class FGrupos extends Fragment {
 
     }
 
+    //Llamada a WS para recuperar los grupos de los que forma parte el usuario
     private void recuperarGrupos() {
 
         grupos.clear();

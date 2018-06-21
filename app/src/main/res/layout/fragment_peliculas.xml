@@ -16,48 +16,10 @@
         android:visibility="gone" />
 
 
-    <LinearLayout
-        android:id="@+id/layout"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:orientation="horizontal"
-        android:layout_marginTop="5dp">
-
-        <Spinner
-            android:id="@+id/spalgo"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:layout_margin="2dp"/>
-
-        <Spinner
-            android:id="@+id/spgenero"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:layout_margin="2dp"/>
-
-        <Spinner
-            android:id="@+id/spaño"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:layout_margin="2dp"/>
-    </LinearLayout>
-
-
-    <View
-        android:id="@+id/separator2"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="#5A6ABC"
-        android:layout_below="@id/layout" />
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycledView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/separator2" />
+        android:layout_height="match_parent" />
 
 
 

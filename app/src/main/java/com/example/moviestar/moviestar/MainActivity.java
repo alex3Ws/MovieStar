@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity
     final android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
     RequestQueue request;
     ArrayList<Amigo> amigosArray;
+    TextView nombreUser;
 
     boolean peticionesAmistad = false;
 
@@ -56,6 +57,7 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -65,9 +67,17 @@ public class MainActivity extends AppCompatActivity
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+
+
         materialSearchView = findViewById(R.id.busqueda);
 
-        //user_name = getIntent().getStringExtra("Usuario");
+        user_name = getIntent().getStringExtra("Usuario");
+
+        View hView = navigationView.getHeaderView(0);
+
+        nombreUser = hView.findViewById(R.id.tvnombreUser);
+        nombreUser.setText(user_name);
+
         user_id = getIntent().getIntExtra("user_id",0);
 
         amigosArray = new ArrayList<>();
@@ -107,6 +117,12 @@ public class MainActivity extends AppCompatActivity
                 return false;
             }
         });
+
+        MenuItem item = navigationView.getMenu().getItem(2);
+
+        RelativeLayout rl = (RelativeLayout) item.getActionView();
+
+        rl.setVisibility(View.GONE);
 
 
 
@@ -159,7 +175,7 @@ public class MainActivity extends AppCompatActivity
         info = new Bundle();
         info.putInt("id",user_id);
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_home) {
 
 
 
@@ -168,7 +184,7 @@ public class MainActivity extends AppCompatActivity
 
             fragmentManager.beginTransaction().replace(R.id.contenedor, fPeliculas).commit();
 
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_area_personal) {
 
             Intent intent = new Intent(getBaseContext(),AreaPersonal.class);
             intent.putExtra("user_id",user_id);
@@ -179,7 +195,7 @@ public class MainActivity extends AppCompatActivity
 
 
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_amigos) {
             Intent intent;
 
 
@@ -188,14 +204,16 @@ public class MainActivity extends AppCompatActivity
                 intent.putExtra("peticiones", amigosArray);
 
 
+
             }
             else{
 
                 intent = new Intent(getApplicationContext(),AreaAmigos.class);
 
             }
-            intent.putExtra("user_id",user_id);
 
+            intent.putExtra("user_id",user_id);
+            intent.putExtra("user_name",user_name);
             startActivity(intent);
 
 
@@ -203,16 +221,12 @@ public class MainActivity extends AppCompatActivity
 
 
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.nav_grupos) {
 
             FGrupos fGrupos = new FGrupos();
             fGrupos.setArguments(info);
 
             fragmentManager.beginTransaction().replace(R.id.contenedor, fGrupos).commit();
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
 
         }
 
@@ -222,6 +236,7 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    //Llamada a WS para comprobar si hay peticiones de amistad
     private void  comprobarPeticiones() {
 
         String url = getString(R.string.url);

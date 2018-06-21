@@ -11,12 +11,11 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.example.moviestar.moviestar.Fragments.FCriticasPeli;
+
 import com.example.moviestar.moviestar.Fragments.FDatosPeli;
 import com.example.moviestar.moviestar.Fragments.FTrailerPeli;
 import com.squareup.picasso.Picasso;
@@ -69,6 +68,8 @@ public class InfoPeliculas extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back);
 
+
+        //Poner la status bar del mismo color que la toolbar
         int myColor = Color.parseColor("#303F9F");
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -92,13 +93,13 @@ public class InfoPeliculas extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        //Crear las dos tabs
         tabLayout.addTab(tabLayout.newTab().setText("Datos"));
         tabLayout.addTab(tabLayout.newTab().setText("Trailers"));
-        tabLayout.addTab(tabLayout.newTab().setText("Criticas"));
 
 
 
-
+        // Uso de la libreria Picasso para cargar las imagenes
         Picasso.get().load(urlBaseImagenes+jsonObject.optString("backdrop_path")).placeholder(getApplicationContext().getResources().getDrawable(R.drawable.cinefondo)).error(getApplicationContext().getResources().getDrawable(R.drawable.cinefondo)).resize(1100,605).into(fondo);
 
 
@@ -191,12 +192,6 @@ public class InfoPeliculas extends AppCompatActivity {
 
                             return fTrailerPeli;
 
-                    case 2:
-                            FCriticasPeli fCriticasPeli = new FCriticasPeli();
-
-
-                            return fCriticasPeli;
-
                 }
 
                 return null;
@@ -206,7 +201,7 @@ public class InfoPeliculas extends AppCompatActivity {
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 3;
+            return 2;
         }
 
 

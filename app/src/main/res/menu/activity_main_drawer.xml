@@ -6,36 +6,23 @@
 
     <group android:checkableBehavior="single" android:id="@+id/grupo">
         <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_home"
             android:title="Inicio" />
         <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
+            android:id="@+id/nav_area_personal"
+            android:icon="@drawable/ic_person"
             android:title="Area Personal" />
         <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:id="@+id/nav_amigos"
+            android:icon="@drawable/ic_people"
             android:title="Amigos"
             app:actionLayout="@layout/icono_notificacion"/>
 
         <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
+            android:id="@+id/nav_grupos"
+            android:icon="@drawable/ic_group"
             android:title="Grupos" />
     </group>
-
-    <item android:title="Communicate">
-        <menu>
-            <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
-            <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
-        </menu>
-    </item>
 
 </menu>

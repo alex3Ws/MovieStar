@@ -68,6 +68,8 @@ public class CrearGrupo extends AppCompatActivity {
 
 
 
+        //Poner status bar del mismo color que la toolbar
+
         int myColor = Color.parseColor("#303F9F");
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -191,12 +193,14 @@ public class CrearGrupo extends AppCompatActivity {
 
     }
 
+    //Asignar funcion de ir a atrás a la flecha de la toolbar
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return false;
     }
 
+    // Llamada a WS para recuperar la lista de amigos
     private void recuperarAmigos() {
 
         String url = getString(R.string.url);
@@ -267,6 +271,8 @@ public class CrearGrupo extends AppCompatActivity {
 
     }
 
+
+    //Llamada a WS para crear el grupo
     private void crearGrupo(){
 
         String url = getString(R.string.url);

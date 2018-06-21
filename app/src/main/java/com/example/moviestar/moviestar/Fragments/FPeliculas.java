@@ -97,7 +97,7 @@ public class FPeliculas extends Fragment implements Response.Listener<JSONObject
         return vista;
     }
 
-
+    //Llamada a la Api para recuperar las peliculas de forma paginada
     public void llamarApi(){
 
 
@@ -162,7 +162,6 @@ public class FPeliculas extends Fragment implements Response.Listener<JSONObject
 
 
 
-
         recycledPeliculas.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -176,6 +175,7 @@ public class FPeliculas extends Fragment implements Response.Listener<JSONObject
 
             }
 
+            //Si se ha llegado al final del scroll, se llama de nuevo a la Api para recuperar mas peliculas
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
@@ -208,6 +208,7 @@ public class FPeliculas extends Fragment implements Response.Listener<JSONObject
 
     }
 
+    //Obtener nombre del genero a partir del id del genero devuelto por la Api
     public ArrayList<String> obtenerGeneros(int genero_id) {
         String genero = null;
 
